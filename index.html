@@ -9,11 +9,11 @@
     :root{--bg:#071834;--card:#ffffff10;--accent1:#7c3aed;--accent2:#06b6d4;--muted:#33506b;--glass:rgba(255,255,255,0.04)}
     *{box-sizing:border-box;font-family: 'Poppins', Inter, system-ui, Arial, sans-serif}
     body{margin:0;background:linear-gradient(180deg,#f0f8ff 0%,#dff4ff 100%);color:#04243a;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
-    .wrap{width:980px;max-width:100%;background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.92));border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(2,6,23,0.08)}
+    .wrap{width:980px;max-width:760px;background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.92));border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(2,6,23,0.08)}
     header{display:flex;align-items:center;gap:12px}
     .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#02141a;font-size:20px;font-family:'Orbitron',sans-serif}
     h1{margin:0;font-size:26px;color:#04243a;font-family:'Orbitron',sans-serif;letter-spacing:1px}
-    p.lead{margin:6px 0 14px;color:var(--muted);font-weight:600}
+    p.lead{margin:6px 0 14px;color:var(--muted);font-weight:700}
     .row{display:flex;gap:14px}
     .left{flex:1;min-width:260px}
     .right{width:340px}
@@ -23,14 +23,14 @@
     .node:hover{transform:translateY(-4px)}
     .node.selected{box-shadow:0 12px 30px rgba(124,58,237,0.12);outline:2px solid rgba(6,182,212,0.06);background:linear-gradient(90deg, rgba(124,58,237,0.06), rgba(6,182,212,0.04))}
     .task{margin-top:14px}
-    .task-title{font-weight:800;color:#04243a}
+    .task-title{font-weight:900;color:#04243a}
     .options{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-    .opt{padding:12px 14px;border-radius:10px;background:#ffffff;cursor:pointer;border:1px solid rgba(4,36,58,0.06);transition:background .12s ease,transform .08s ease;color:#04243a;font-weight:600}
+    .opt{padding:12px 14px;border-radius:10px;background:#ffffff;cursor:pointer;border:1px solid rgba(4,36,58,0.06);transition:background .12s ease,transform .08s ease;color:#04243a;font-weight:800;user-select:none}
     .opt:hover{transform:translateX(6px)}
-    .opt.selected{outline:2px dashed rgba(4,36,58,0.08)}
+    .opt.selected{outline:2px dashed rgba(4,36,58,0.08);background:#f0f9ff}
     .opt.correct{background:#e6fff0;border-color:#86efac;color:#064e3b}
     .opt.wrong{background:#fff0f0;border-color:#fca5a5;color:#7f1d1d}
-    .controls{display:flex;gap:8px;margin-top:12px}
+    .controls{display:flex;gap:8px;margin-top:12px;align-items:center}
     button{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:0;padding:10px 14px;border-radius:10px;color:#02141a;cursor:pointer;font-weight:800}
     .muted-btn{background:transparent;border:1px solid rgba(4,36,58,0.06);color:var(--muted);padding:8px 12px;font-weight:700}
     .stats{display:flex;flex-direction:column;gap:8px}
@@ -38,9 +38,9 @@
     footer{margin-top:12px;color:var(--muted);font-size:13px}
     .leader{margin-top:12px}
     .leader li{padding:8px 10px;border-radius:8px;margin-bottom:8px;background:#ffffff;display:flex;justify-content:space-between;border:1px solid rgba(4,36,58,0.04)}
-    /* Welcome overlay in light sky-blue with bold cold title */
+    /* Welcome overlay in light sky-blue with bold cold title - MINIMAL */
     .welcome-overlay{position:fixed;inset:0;background:linear-gradient(180deg,#e8f7ff 0%,#d6f0ff 100%);display:flex;align-items:center;justify-content:center}
-    .welcome-card{width:760px;max-width:92%;background:#ffffff;padding:20px;border-radius:14px;box-shadow:0 20px 60px rgba(4,36,58,0.06);color:#04243a}
+    .welcome-card{width:600px;max-width:92%;background:#ffffff;padding:20px;border-radius:14px;box-shadow:0 20px 60px rgba(4,36,58,0.06);color:#04243a}
     .qsmall{font-size:13px;color:#0b3b52}
     .xhandle{color:#056a86;font-weight:700;text-decoration:none}
     .topbar{display:flex;justify-content:space-between;align-items:center}
@@ -49,6 +49,7 @@
     .badge-card{background:linear-gradient(90deg,#fff9eb,#fff7e6);padding:24px;border-radius:16px;text-align:center;box-shadow:0 30px 80px rgba(4,36,58,0.12)}
     .medal{width:160px;height:160px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #ffd54a, #f59e0b 60%, #b45309 100%);display:flex;align-items:center;justify-content:center;margin:12px auto;box-shadow:0 10px 30px rgba(180,120,20,0.18)}
     .medal-inner{width:110px;height:110px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;color:#b45309}
+    .submitBtn{background:linear-gradient(90deg,#ffd76a,#ffcc00);border:none;color:#001;padding:10px 14px;border-radius:10px;font-weight:800;cursor:pointer}
     @media(max-width:900px){.row{flex-direction:column}.right{width:100%}}
   </style>
 </head>
@@ -77,13 +78,14 @@
 
           <div class="task" id="taskArea">
             <div class="task-title">Task</div>
-            <div id="taskContent" style="margin-top:8px;color:#0b3b52">Press <strong>Start Task</strong> to receive a Gensyn-related question.</div>
+            <div id="taskContent" style="margin-top:8px;color:#0b3b52">Press <strong>Start Quiz</strong> to begin.</div>
 
             <div class="options" id="options"></div>
 
             <div class="controls">
-              <button id="startBtn">Start Task</button>
-              <button class="muted-btn" id="skipBtn">Skip (cost 5 credits)</button>
+              <!-- Start Task button removed from here to ensure it's only available once at the beginning -->
+              <button class="muted-btn" id="skipBtn" style="display:none">Skip (cost 5 credits)</button>
+              <button id="submitAnswer" class="submitBtn" style="display:none;margin-left:8px">Submit Answer</button>
               <div style="margin-left:auto;color:#0b3b52;align-self:center">Timer: <span id="timer">--</span></div>
             </div>
           </div>
@@ -132,42 +134,34 @@
     <footer>Made for Gensyn-style contribution demo • <a class="xhandle" href="https://x.com/AmitKum955" target="_blank">@AmitKum955</a> • <a class="xhandle" href="https://x.com/GensynAI" target="_blank">@GensynAI</a></footer>
   </div>
 
-  <!-- Welcome overlay (light sky-blue) -->
-  <div class="welcome-overlay" id="welcome" style="display:none">
+  <!-- Welcome overlay (MINIMAL): only welcome, short game description & rewards + Start Quiz -->
+  <div class="welcome-overlay" id="welcome" style="display:flex">
     <div class="welcome-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-        <div style="flex:1">
-          <h2 style="margin:0 0 6px;color:#04243a;font-family:'Orbitron',sans-serif">WELCOME — PLAY & EARN</h2>
-          <p class="qsmall">This mini-quiz teaches core ideas behind the Gensyn protocol (decentralised ML compute). Answer questions to earn score and badges — only top performers (≥75%) receive a Verified Compute Badge.</p>
-          <div style="margin-top:12px">
-            <strong>How to play</strong>
-            <ol style="margin:8px 0 0 18px;color:#0b3b52">
-              <li>Enter your name (and your X handle if you want; optional).</li>
-              <li>Choose a compute node (affects rewards).</li>
-              <li>Click <strong>Start</strong> to get a question based on Gensyn docs.</li>
-              <li>Select an answer — result locks and next question appears automatically.</li>
-            </ol>
-          </div>
-        </div>
-        <div style="width:240px">
-          <strong>Why this helps</strong>
-          <p class="qsmall" style="margin-top:8px">Building and sharing demos like this increases community engagement. High scorers get a badge showing their name and handles.</p>
-          <div style="margin-top:8px;font-size:13px;color:#0b3b52"><strong>Project tag:</strong> <a class="xhandle" href="https://x.com/GensynAI" target="_blank">@GensynAI</a></div>
-        </div>
+      <h2 style="margin:0 0 8px;color:#04243a;font-family:'Orbitron',sans-serif">WELCOME — GENSYN COMPUTE QUEST</h2>
+      <p class="qsmall">A short, focused quiz to learn the core ideas behind Gensyn (decentralised ML compute). Complete the quiz to earn badges and leaderboard recognition.</p>
+      <div style="margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(90deg,#ffe259,#ffcc00);color:#001;font-weight:900;text-align:center">Rewards: Earn points, badges and a Verified Compute Badge for top scorers (≥75%).</div>
+      <div style="display:flex;justify-content:center;margin-top:16px">
+        <button id="openNameModal" style="font-size:18px;padding:12px 22px">Start Quiz</button>
       </div>
+    </div>
+  </div>
 
+  <!-- Name modal shown AFTER Start Quiz clicked (asks name & handle) -->
+  <div class="welcome-overlay" id="nameModal" style="display:none">
+    <div class="welcome-card">
+      <h3 style="margin:0 0 8px;color:#04243a">Enter your details</h3>
+      <p class="qsmall">We ask your name to personalize rewards and leaderboard entries. X handle is optional.</p>
       <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
         <label style="min-width:90px;color:#04243a">Your name:</label>
-        <input id="playerName" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(4,36,58,0.06)" placeholder="Enter your name" />
+        <input id="modalPlayerName" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(4,36,58,0.06)" placeholder="Enter your name" />
       </div>
       <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
         <label style="min-width:90px;color:#04243a">X handle (optional):</label>
-        <input id="playerHandle" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(4,36,58,0.06)" placeholder="@yourhandle (optional)" />
+        <input id="modalPlayerHandle" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(4,36,58,0.06)" placeholder="@yourhandle (optional)" />
       </div>
-
       <div style="display:flex;justify-content:flex-end;margin-top:14px;gap:8px">
-        <button id="startPlay">Start</button>
-        <button class="muted-btn" id="closeWelcome">Close</button>
+        <button id="startConfirmed">Start</button>
+        <button class="muted-btn" id="cancelName">Cancel</button>
       </div>
     </div>
   </div>
@@ -211,6 +205,8 @@
     let credits = 20; let score = 0; let badges = 0;
     let timerInterval = null; let timeLeft = 0; let currentTask = null; let optionsDisabled=false;
     let askedCount = 0; let correctCount = 0; const MAX_QUESTIONS = tasksPool.length; // quiz length
+    let sessionOrder = [];
+    let selectedChoices = []; // for multi-select
 
     const nodesEl = document.getElementById('nodes');
     const optionsEl = document.getElementById('options');
@@ -221,8 +217,11 @@
     const badgesEl = document.getElementById('badges');
     const leadersEl = document.getElementById('leaders');
     const welcomeEl = document.getElementById('welcome');
+    const nameModal = document.getElementById('nameModal');
     const playerDisplay = document.getElementById('playerDisplay');
     const badgeModal = document.getElementById('badgeModal');
+    const submitBtn = document.getElementById('submitAnswer');
+    const skipBtn = document.getElementById('skipBtn');
 
     function renderNodes(){
       nodesEl.innerHTML='';
@@ -235,270 +234,82 @@
       })
     }
 
-    function shuffle(arr){
-      for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}
-    }
+    function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}}
 
-    // Create a shuffled question order for this session
-    let sessionOrder = [];
-    function prepareSession(){
-      sessionOrder = tasksPool.map((_,i)=>i);
-      shuffle(sessionOrder);
-      askedCount = 0; correctCount = 0;
-    }
+    function prepareSession(){sessionOrder = tasksPool.map((_,i)=>i);shuffle(sessionOrder);askedCount = 0; correctCount = 0;}
+    function getNextTask(){ if(askedCount>=MAX_QUESTIONS) return null; const idx=sessionOrder[askedCount]; askedCount++; return JSON.parse(JSON.stringify(tasksPool[idx])); }
 
-    function getNextTask(){
-      if(askedCount>=MAX_QUESTIONS) return null;
-      const idx = sessionOrder[askedCount];
-      askedCount++;
-      return JSON.parse(JSON.stringify(tasksPool[idx]));
-    }
+    // Open name modal when user clicks Start Quiz on welcome
+    document.getElementById('openNameModal').onclick = ()=>{ nameModal.style.display='flex'; document.getElementById('modalPlayerName').focus(); };
+    document.getElementById('cancelName').onclick = ()=>{ nameModal.style.display='none'; };
 
-    // show welcome overlay every time Start Task is pressed
-    document.getElementById('startBtn').onclick = ()=>{ showWelcome(true); };
-
-    function showWelcome(focusName){
-      // show overlay and pre-fill existing name/handle
-      welcomeEl.style.display = 'flex';
-      const input = document.getElementById('playerName');
-      const handleInput = document.getElementById('playerHandle');
-      input.value = playerName || '';
-      handleInput.value = playerHandle || '';
-      if(focusName) input.focus();
-    }
+    document.getElementById('startConfirmed').onclick = ()=>{
+      const input=document.getElementById('modalPlayerName'); const handleInput=document.getElementById('modalPlayerHandle');
+      const val=(input.value||'').trim(); const hval=(handleInput.value||'').trim();
+      if(!val){ alert('Please enter your name to start.'); input.focus(); return; }
+      playerName = val.slice(0,24); playerHandle = hval.slice(0,24);
+      nameModal.style.display='none'; welcomeEl.style.display='none'; updatePlayerDisplay();
+      prepareSession(); startTask();
+    };
 
     function startTask(){
-      if(!playerName){alert('Please enter your name in the welcome screen before starting.');return}
-      if(!selectedNode){alert('Choose a node first.');return}
-      if(credits<=0){alert('No credits left. Save score or restart.');return}
+      if(!playerName){ alert('Please enter your name to start.'); return }
+      if(!selectedNode){ alert('Choose a node first.'); return }
+      if(credits<=0){ alert('No credits left. Save score or restart.'); return }
       if(askedCount===0) prepareSession();
       currentTask = getNextTask();
       if(!currentTask){ endQuiz(); return }
-      optionsDisabled=false;
-      timeLeft = 30; // seconds per question
-      taskContent.textContent = currentTask.q;
-      renderOptions(currentTask.opts);
-      startTimer();
-      updatePlayerDisplay();
+      optionsDisabled=false; selectedChoices = [];
+      timeLeft = 30; taskContent.textContent = currentTask.q; renderOptions(currentTask.opts); startTimer(); updatePlayerDisplay();
     }
 
-    function renderOptions(opts){
-      optionsEl.innerHTML='';
-      opts.forEach((o,i)=>{
-        const b=document.createElement('div');
-        b.className='opt';
-        b.textContent = o;
-        b.onclick=()=>handleAnswerClick(i,b);
-        optionsEl.appendChild(b);
-      })
+    function renderOptions(opts){ optionsEl.innerHTML=''; const isMulti = (currentTask.ans && currentTask.ans.length>1);
+      opts.forEach((o,i)=>{ const b=document.createElement('div'); b.className='opt'; b.textContent=o; b.dataset.index=i; if(isMulti){ b.onclick=()=>toggleSelection(i,b);} else { b.onclick=()=>handleAnswerClick(i,b);} optionsEl.appendChild(b); });
+      submitBtn.style.display = (currentTask.ans && currentTask.ans.length>1)?'inline-block':'none'; skipBtn.style.display='none';
     }
 
-    function handleAnswerClick(i,el){
-      if(optionsDisabled) return;
-      optionsDisabled = true;
-      clearInterval(timerInterval);
-      // mark user's selection visually
-      el.classList.add('selected');
-      evaluateTask([i]);
+    function toggleSelection(i,el){ if(optionsDisabled) return; const idx=selectedChoices.indexOf(i); if(idx===-1){ selectedChoices.push(i); el.classList.add('selected'); } else { selectedChoices.splice(idx,1); el.classList.remove('selected'); } }
+    function handleAnswerClick(i,el){ if(optionsDisabled) return; optionsDisabled=true; clearInterval(timerInterval); el.classList.add('selected'); evaluateTask([i]); }
+    submitBtn.onclick = ()=>{ if(optionsDisabled) return; if(selectedChoices.length===0){ alert('Please select at least one option before submitting.'); return } optionsDisabled=true; clearInterval(timerInterval); evaluateTask(selectedChoices.slice().sort()); };
+
+    function startTimer(){ clearInterval(timerInterval); timerEl.textContent = timeLeft + 's'; timerInterval = setInterval(()=>{ timeLeft--; timerEl.textContent = timeLeft + 's'; if(timeLeft<=0){ clearInterval(timerInterval); optionsDisabled=true; evaluateTask([]); } },1000); }
+
+    function evaluateTask(userChosenIdx){ const chosenIdx=(userChosenIdx||[]).slice().sort(); const correctIdx=(currentTask.ans||[]).slice().sort(); Array.from(optionsEl.children).forEach((child,idx)=>{ child.classList.remove('correct','wrong','selected'); if(correctIdx.includes(idx)) child.classList.add('correct'); if(chosenIdx.includes(idx) && !correctIdx.includes(idx)) child.classList.add('wrong'); }); const isCorrect = arraysEqual(chosenIdx, correctIdx);
+      if(isCorrect){ const node = nodesData.find(n=>n.id===selectedNode); const factor = node?node.reliability:0.9; const gained = Math.ceil(10 * factor); score += gained; badges += 1; credits += 2; correctCount += 1; showMessage(`Correct! +${gained} points`, true); } else { credits -= 3; if(chosenIdx.length===0) showMessage('Time out! -3 credits', false); else showMessage('Incorrect. -3 credits', false); }
+      updateUI(); setTimeout(()=>{ if(askedCount>=MAX_QUESTIONS || credits<=0){ endQuiz(); } else { startTask(); } },1400);
     }
 
-    function startTimer(){
-      clearInterval(timerInterval);
-      timerEl.textContent = timeLeft + 's';
-      timerInterval = setInterval(()=>{
-        timeLeft--;
-        timerEl.textContent = timeLeft + 's';
-        if(timeLeft<=0){
-          clearInterval(timerInterval);
-          optionsDisabled = true;
-          evaluateTask([]); // no selection -> timeout
-        }
-      },1000)
+    function arraysEqual(a,b){ if(a.length!==b.length) return false; for(let i=0;i<a.length;i++) if(a[i]!==b[i]) return false; return true; }
+    function showMessage(text,ok){ const prev=document.getElementById('msg'); if(prev) prev.remove(); const m=document.createElement('div'); m.id='msg'; m.textContent=text; m.style.marginTop='8px'; m.style.color = ok? '#064e3b':'#7f1d1d'; taskContent.parentNode.insertBefore(m, optionsEl.nextSibling); setTimeout(()=>{ if(m) m.remove(); },1200); }
+    function updateUI(){ creditsEl.textContent=credits; scoreEl.textContent=score; badgesEl.textContent=badges; renderLeaders(); updatePlayerDisplay(); }
+    function skipTask(){ if(credits<5){ alert('Not enough credits to skip'); return } credits -=5; updateUI(); clearInterval(timerInterval); timerEl.textContent='--'; optionsEl.innerHTML=''; taskContent.textContent='Task skipped. Press Start Quiz to continue.'; optionsDisabled=true; }
+
+    function endQuiz(){ clearInterval(timerInterval); optionsEl.innerHTML=''; taskContent.textContent = `🎉 Quiz finished!`; const percent = Math.round((correctCount / MAX_QUESTIONS)*100); const r=document.createElement('div'); r.style.marginTop='12px'; r.innerHTML = `<div style="margin-top:6px;color:#0b3b52">Final Score: <strong>${score}</strong> — Correct: <strong>${correctCount}</strong>/${MAX_QUESTIONS} (${percent}%)</div>`;
+      const btn=document.createElement('button'); btn.style.marginTop='10px'; if(percent>=75){ btn.textContent='Back to Start'; } else { btn.textContent='Try Again'; }
+      btn.onclick = ()=>{ restartQuiz(); welcomeEl.style.display='flex'; };
+      r.appendChild(btn); taskContent.parentNode.appendChild(r);
+      if(percent>=75){ setTimeout(()=>{ showBadge(); },600); }
+      setTimeout(()=>{ if(confirm('Save your score to leaderboard?')){ saveScore(true); } },800);
     }
 
-    function evaluateTask(userChosenIdx){
-      const chosenIdx = (userChosenIdx||[]).slice().sort();
-      const correctIdx = (currentTask.ans||[]).slice().sort();
-      // mark options visually correct/wrong
-      Array.from(optionsEl.children).forEach((child,idx)=>{
-        child.classList.remove('correct','wrong','selected');
-        if(correctIdx.includes(idx)) child.classList.add('correct');
-        if(chosenIdx.includes(idx) && !correctIdx.includes(idx)) child.classList.add('wrong');
-      })
+    function showBadge(){ document.getElementById('badgeName').textContent=playerName||'Player'; const handles=[playerHandle||'', '@AmitKum955','@GensynAI'].filter(Boolean).join(' • '); document.getElementById('badgeHandles').textContent = handles; badgeModal.style.display='flex'; }
+    function restartQuiz(){ credits=20; score=0; badges=0; askedCount=0; correctCount=0; prepareSession(); const prev=document.getElementById('msg'); if(prev) prev.remove(); Array.from(optionsEl.children).forEach(c=>c.remove()); taskContent.textContent='Press Start Quiz to begin.'; updateUI(); }
 
-      const isCorrect = arraysEqual(chosenIdx, correctIdx);
-      if(isCorrect){
-        const node = nodesData.find(n=>n.id===selectedNode);
-        const factor = node?node.reliability:0.9;
-        const gained = Math.ceil(10 * factor);
-        score += gained;
-        badges += 1;
-        credits += 2;
-        correctCount += 1;
-        showMessage(`Correct! +${gained} points`, true);
-      } else {
-        credits -= 3;
-        if(chosenIdx.length===0) showMessage('Time out! -3 credits', false);
-        else showMessage('Incorrect. -3 credits', false);
-      }
-      updateUI();
-      setTimeout(()=>{
-        if(askedCount>=MAX_QUESTIONS || credits<=0){ endQuiz(); }
-        else { startTask(); }
-      },1400);
-    }
+    function saveScore(auto=false){ let name = playerName || prompt('Enter name to save on leaderboard (short):','Player'); if(!name) return; const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]'); table.push({name:name.slice(0,12),score,when:new Date().toISOString()}); table.sort((a,b)=>b.score-a.score); localStorage.setItem('gensyn_leaders', JSON.stringify(table.slice(0,30))); renderLeaders(); if(!auto) alert('Saved!'); }
+    function renderLeaders(){ const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]'); leadersEl.innerHTML=''; if(table.length===0){ leadersEl.innerHTML='<li style="list-style:none;color:#0b3b52">No scores yet</li>'; return } table.slice(0,10).forEach(r=>{ const li=document.createElement('li'); li.innerHTML = `<span>${r.name}</span><strong>${r.score}</strong>`; leadersEl.appendChild(li); }) }
+    function shareScore(){ const text = `I scored ${score} on Gensyn Compute Quest demo!`; const url = window.location.href || 'Local demo'; const tw = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&via=AmitKum955`; window.open(tw,'_blank'); }
 
-    function arraysEqual(a,b){
-      if(a.length!==b.length) return false;
-      for(let i=0;i<a.length;i++) if(a[i]!==b[i]) return false;
-      return true;
-    }
-
-    function showMessage(text,ok){
-      const prev = document.getElementById('msg'); if(prev) prev.remove();
-      const m = document.createElement('div'); m.id='msg'; m.textContent=text; m.style.marginTop='8px'; m.style.color= ok? '#064e3b':'#7f1d1d';
-      taskContent.parentNode.insertBefore(m, optionsEl.nextSibling);
-      setTimeout(()=>{ if(m) m.remove(); },1200);
-    }
-
-    function updateUI(){
-      creditsEl.textContent = credits;
-      scoreEl.textContent = score;
-      badgesEl.textContent = badges;
-      renderLeaders();
-      updatePlayerDisplay();
-    }
-
-    function skipTask(){
-      if(credits<5){alert('Not enough credits to skip');return}
-      credits -=5; updateUI();
-      clearInterval(timerInterval); timerEl.textContent='--'; optionsEl.innerHTML=''; taskContent.textContent='Task skipped. Press Start Task.'; optionsDisabled=true;
-    }
-
-    function endQuiz(){
-      clearInterval(timerInterval);
-      optionsEl.innerHTML='';
-      taskContent.textContent = `🎉 Quiz finished!`;
-      const percent = Math.round((correctCount / MAX_QUESTIONS)*100);
-      const r = document.createElement('div'); r.style.marginTop='12px';
-      r.innerHTML = `<div style="margin-top:6px;color:#0b3b52">Final Score: <strong>${score}</strong> — Correct: <strong>${correctCount}</strong>/${MAX_QUESTIONS} (${percent}%)</div>`;
-      const btn = document.createElement('button'); btn.textContent='Restart Quiz'; btn.style.marginTop='10px';
-      btn.onclick = ()=>{ // show welcome again on restart
-        restartQuiz(); showWelcome(true);
-      };
-      r.appendChild(btn);
-      taskContent.parentNode.appendChild(r);
-
-      // Award badge only if >=75%
-      if(percent>=75){
-        setTimeout(()=>{ showBadge(); },600);
-      }
-
-      // Prompt to save score
-      setTimeout(()=>{
-        if(confirm('Save your score to leaderboard?')){ saveScore(true); }
-      },800);
-    }
-
-    function showBadge(){
-      // populate badge info
-      document.getElementById('badgeName').textContent = playerName || 'Player';
-      const handles = [playerHandle || '', '@AmitKum955', '@GensynAI'].filter(Boolean).join(' • ');
-      document.getElementById('badgeHandles').textContent = handles;
-      badgeModal.style.display = 'flex';
-    }
-
-    function restartQuiz(){
-      credits = 20; score = 0; badges = 0; askedCount = 0; correctCount = 0;
-      prepareSession();
-      const prev = document.getElementById('msg'); if(prev) prev.remove();
-      Array.from(optionsEl.children).forEach(c=>c.remove());
-      taskContent.textContent = 'Press Start Task to receive a Gensyn-related question.';
-      updateUI();
-    }
-
-    function saveScore(auto=false){
-      let name = playerName || prompt('Enter name to save on leaderboard (short):','Player');
-      if(!name) return;
-      const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]');
-      table.push({name:name.slice(0,12),score,when:new Date().toISOString()});
-      table.sort((a,b)=>b.score-a.score);
-      localStorage.setItem('gensyn_leaders', JSON.stringify(table.slice(0,30)));
-      renderLeaders();
-      if(!auto) alert('Saved!');
-    }
-
-    function renderLeaders(){
-      const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]');
-      leadersEl.innerHTML='';
-      if(table.length===0){ leadersEl.innerHTML='<li style="list-style:none;color:#0b3b52">No scores yet</li>'; return}
-      table.slice(0,10).forEach(r=>{
-        const li=document.createElement('li'); li.innerHTML = `<span>${r.name}</span><strong>${r.score}</strong>`; leadersEl.appendChild(li);
-      })
-    }
-
-    function shareScore(){
-      const text = `I scored ${score} on Gensyn Compute Quest demo!`;
-      const url = window.location.href || 'Local demo';
-      const tw = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&via=AmitKum955`;
-      window.open(tw,'_blank');
-    }
-
-    // welcome controls
-    document.getElementById('startPlay').onclick = ()=>{
-      const input = document.getElementById('playerName');
-      const handleInput = document.getElementById('playerHandle');
-      const val = (input.value||'').trim();
-      const hval = (handleInput.value||'').trim();
-      if(!val){ alert('Please enter your name to start.'); input.focus(); return; }
-      playerName = val.slice(0,24);
-      playerHandle = hval.slice(0,24);
-      welcomeEl.style.display='none';
-      updatePlayerDisplay();
-      // auto-prepare session and immediately start question
-      prepareSession();
-      startTask();
-    };
-    document.getElementById('closeWelcome').onclick = ()=>{ welcomeEl.style.display='none'; };
-
+    // name modal controls
+    document.getElementById('startConfirmed').onclick; document.getElementById('cancelName').onclick;
     // badge controls
     document.getElementById('closeBadge').onclick = ()=>{ badgeModal.style.display='none'; };
     document.getElementById('downloadBadge').onclick = ()=>{ downloadBadgeImage(); };
-
-    // wire other buttons
-    document.getElementById('skipBtn').onclick = ()=>{ skipTask(); };
     document.getElementById('saveScore').onclick = ()=>{ saveScore(false); };
     document.getElementById('shareBtn').onclick = ()=>{ shareScore(); };
 
-    function updatePlayerDisplay(){
-      playerDisplay.textContent = 'Player: ' + (playerName || '—');
-    }
+    function updatePlayerDisplay(){ playerDisplay.textContent = 'Player: ' + (playerName || '—'); }
 
-    // download badge as PNG using SVG-to-canvas
-    function downloadBadgeImage(){
-      const name = playerName || 'Player';
-      const handles = [playerHandle || '', '@AmitKum955', '@GensynAI'].filter(Boolean).join(' • ');
-      // create canvas and draw medal
-      const c = document.createElement('canvas'); c.width = 800; c.height = 800; const ctx = c.getContext('2d');
-      // background
-      ctx.fillStyle = '#fff7e6'; ctx.fillRect(0,0,c.width,c.height);
-      // outer medal
-      const cx = 400, cy = 300, r = 200;
-      const grad = ctx.createRadialGradient(cx-60,cy-60,50,cx,cy,220);
-      grad.addColorStop(0,'#ffd54a'); grad.addColorStop(0.6,'#f59e0b'); grad.addColorStop(1,'#b45309');
-      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fillStyle=grad; ctx.fill();
-      // inner white circle
-      ctx.beginPath(); ctx.arc(cx,cy,130,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
-      // text (initials or icon)
-      ctx.fillStyle='#b45309'; ctx.font='bold 56px Poppins, sans-serif'; ctx.textAlign='center'; ctx.fillText('🏅',cx,cy+18);
-      // name
-      ctx.fillStyle='#04243a'; ctx.font='bold 28px Poppins, sans-serif'; ctx.fillText(name,cx,cy+220);
-      // handles
-      ctx.fillStyle='#056a86'; ctx.font='18px Poppins, sans-serif'; ctx.fillText(handles,cx,cy+260);
-      // export
-      const url = c.toDataURL('image/png');
-      const a = document.createElement('a'); a.href = url; a.download = `${name.replace(/\s+/g,'_')}_gensyn_badge.png`; a.click();
-    }
+    function downloadBadgeImage(){ const name = playerName || 'Player'; const handles = [playerHandle || '', '@AmitKum955', '@GensynAI'].filter(Boolean).join(' • '); const c=document.createElement('canvas'); c.width=800; c.height=800; const ctx=c.getContext('2d'); ctx.fillStyle='#fff7e6'; ctx.fillRect(0,0,c.width,c.height); const cx=400,cy=300,r=200; const grad=ctx.createRadialGradient(cx-60,cy-60,50,cx,cy,220); grad.addColorStop(0,'#ffd54a'); grad.addColorStop(0.6,'#f59e0b'); grad.addColorStop(1,'#b45309'); ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fillStyle=grad; ctx.fill(); ctx.beginPath(); ctx.arc(cx,cy,130,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.fillStyle='#b45309'; ctx.font='bold 56px Poppins, sans-serif'; ctx.textAlign='center'; ctx.fillText('🏅',cx,cy+18); ctx.fillStyle='#04243a'; ctx.font='bold 28px Poppins, sans-serif'; ctx.fillText(name,cx,cy+220); ctx.fillStyle='#056a86'; ctx.font='18px Poppins, sans-serif'; ctx.fillText(handles,cx,cy+260); const url=c.toDataURL('image/png'); const a=document.createElement('a'); a.href=url; a.download=`${name.replace(/\s+/g,'_')}_gensyn_badge.png`; a.click(); }
 
     // init
     renderNodes(); updateUI(); renderLeaders();
