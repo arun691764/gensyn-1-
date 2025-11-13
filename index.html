@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gensyn — Compute Quest (Demo)</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#7dd3fc;--muted:#94a3b8}
+    *{box-sizing:border-box;font-family:Inter, system-ui, Arial, sans-serif}
+    body{margin:0;background:linear-gradient(180deg,#071029 0%,#071834 100%);color:#e6eef8;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
+    .wrap{width:980px;max-width:100%;background:rgba(255,255,255,0.03);border-radius:12px;padding:18px;box-shadow:0 8px 30px rgba(2,6,23,0.7)}
+    header{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:700;color:#042031}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:6px 0 14px;color:var(--muted)}
+    .row{display:flex;gap:14px}
+    .left{flex:1;min-width:260px}
+    .right{width:320px}
+    .card{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px}
+    .nodes{display:flex;gap:8px;margin-top:8px}
+    .node{flex:1;padding:10px;border-radius:8px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,0.04)}
+    .node.selected{outline:2px solid rgba(125,211,252,0.18);box-shadow:0 6px 18px rgba(125,211,252,0.06)}
+    .task{margin-top:12px}
+    .task-title{font-weight:600}
+    .options{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .opt{padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid rgba(255,255,255,0.03)}
+    .opt.disabled{opacity:0.5;pointer-events:none}
+    .controls{display:flex;gap:8px;margin-top:12px}
+    button{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px;color:inherit;cursor:pointer}
+    .stats{display:flex;flex-direction:column;gap:6px}
+    .big{font-size:20px;font-weight:700}
+    footer{margin-top:12px;color:var(--muted);font-size:13px}
+    .leader{margin-top:12px}
+    .leader li{padding:6px 8px;border-radius:6px;margin-bottom:6px;background:rgba(255,255,255,0.01);display:flex;justify-content:space-between}
+    .share{margin-top:8px}
+    a.link{color:var(--accent);text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">GQ</div>
+      <div>
+        <h1>Gensyn — Compute Quest (Demo)</h1>
+        <p class="lead">Mini-game to teach decentralised ML compute. Save this file as <code>gensyn_compute_quest.html</code> and open in a browser.</p>
+      </div>
+    </header>
+
+    <div class="row" style="margin-top:12px">
+      <div class="left">
+        <div class="card">
+          <div>
+            <strong>Choose your compute node:</strong>
+            <div class="nodes" id="nodes"></div>
+          </div>
+
+          <div class="task" id="taskArea">
+            <div class="task-title">Start the game to get a task.</div>
+            <div id="taskContent" style="margin-top:8px;color:var(--muted)">Press <strong>Start Task</strong>.</div>
+
+            <div class="options" id="options"></div>
+
+            <div class="controls">
+              <button id="startBtn">Start Task</button>
+              <button id="skipBtn">Skip (cost 5 credits)</button>
+              <div style="margin-left:auto;color:var(--muted);align-self:center">Timer: <span id="timer">--</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:12px">
+          <div class="card" style="flex:1">
+            <strong>Quick Tips</strong>
+            <ul style="margin:8px 0 0;color:var(--muted);padding-left:18px">
+              <li>Choose node with more reliability for fewer retries.</li>
+              <li>Complete tasks quickly to earn Proof Badges.</li>
+              <li>Share your score to climb the leaderboard.</li>
+            </ul>
+          </div>
+
+          <div class="card" style="width:220px">
+            <strong>Progress</strong>
+            <div style="margin-top:8px" class="stats">
+              <div>Credits: <span id="credits">20</span></div>
+              <div>Score: <span class="big" id="score">0</span></div>
+              <div>Badges: <span id="badges">0</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <aside class="right">
+        <div class="card">
+          <strong>Leaderboard</strong>
+          <ol id="leaders" class="leader"></ol>
+          <div class="share">
+            <button id="saveScore">Save Score</button>
+            <button id="shareBtn">Share</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <strong>Demo Notes</strong>
+          <p style="color:var(--muted);margin:8px 0 0;font-size:13px">This is a client-only demo: leaderboard uses your browser's localStorage. For production, replace with a backend API.</p>
+        </div>
+
+      </aside>
+    </div>
+
+    <footer>Made for Gensyn‑style contribution demo • Edit & customize freely
+
+## Packaging for a Book (Instructions)
+
+### 1) Include the game in your book (printed) — recommended approach
+- **Appendix with code excerpt:** Add a short excerpt (first 40–80 lines) of the HTML file in the appendix so readers see the structure; avoid printing the full long file. Mention: “Full HTML file available for download (QR code / link)”.
+- **Screenshots & GIF:** Insert 2–3 screenshots or a 6–8 second GIF showing gameplay. This helps readers understand without running code.
+- **QR code / short link:** Generate a QR code pointing to the full file (hosted on GitHub Gist / GitHub Pages / itch.io). Place the QR code near the appendix with a short instruction: “Scan → Download → Open in browser.”
+
+### 2) Include the game in an e‑book (EPUB / PDF)
+- **Embed as a file attachment:** EPUB readers allow attached files — include the full `gensyn_compute_quest.html` as an attachment and link to it from the chapter.
+- **Host and link:** Upload the HTML to GitHub (public repo) or GitHub Gist and link to the raw file. For PDFs, include the link and QR code.
+
+### 3) How to host the file for readers (free options)
+- **GitHub Gist:** Create a public Gist with the HTML; readers can copy or download the raw file.
+- **GitHub Pages / Netlify / itch.io:** Host the HTML so readers can open it directly in browser. These services have free tiers.
+
+### 4) Short “How to run” instructions to put in the book
+- **For readers on PC/Laptop:** 1) Download `gensyn_compute_quest.html`; 2) Double‑click to open in Chrome/Firefox/Edge; 3) Play.
+- **For mobile (Android):** 1) Download the file; 2) Use a file manager to open with Chrome/Edge; 3) If the browser blocks local files, upload to a free host or open via a small free app that serves local files (explain link).
+
+### 5) Licensing & attribution (add to book)
+- Add a short note: “Demo game by [Your Name]. Free to use and customise. For full source visit: [link]."
+
+### 6) QR code tip (what to write near QR)
+- Text: “Scan to download the full HTML file and run in your browser. If the file doesn’t open on mobile, use a desktop browser.”
+
+---
+
+(You can edit the HTML file directly in this project to tweak screenshots, play instructions, or filenames before hosting.)</footer>
+  </div>
+
+  <script>
+    // Simple single-file mini-game (no libraries)
+    const nodesData = [
+      {id:'node-a',name:'Edge Node',reliability:0.9,desc:'Low-power, cheap'},
+      {id:'node-b',name:'Cloud Node',reliability:0.98,desc:'Reliable, medium cost'},
+      {id:'node-c',name:'GPU Rig',reliability:0.85,desc:'Powerful, pricey'},
+    ];
+
+    const tasksPool = [
+      {q:'Classify which items are images (choose ALL that are images):',opts:['🖼️ Image','📄 Text','🎵 Audio','📊 Table'],ans:[0]},
+      {q:'Select items that are text content:',opts:['📄 Report','🖼️ Image','📝 Note','🎵 Clip'],ans:[0,2]},
+      {q:'Which are audio items?',opts:['🎧 Music','📄 Doc','🎵 Clip','🖼️ Photo'],ans:[0,2]},
+      {q:'Pick data types used for ML training:',opts:['🖼️ Images','📄 Text','🎵 Audio','🔢 Numbers'],ans:[0,1,2,3]},
+      {q:'Which option represents verification evidence?',opts:['🔒 Proof','✅ Badge','❌ Error','🔁 Retry'],ans:[0,1]},
+    ];
+
+    let selectedNode = null;
+    let credits = 20; let score = 0; let badges = 0;
+    let timerInterval = null; let timeLeft = 0; let currentTask = null; let optionsDisabled=false;
+
+    const nodesEl = document.getElementById('nodes');
+    const optionsEl = document.getElementById('options');
+    const taskContent = document.getElementById('taskContent');
+    const timerEl = document.getElementById('timer');
+    const creditsEl = document.getElementById('credits');
+    const scoreEl = document.getElementById('score');
+    const badgesEl = document.getElementById('badges');
+    const leadersEl = document.getElementById('leaders');
+
+    function renderNodes(){
+      nodesEl.innerHTML='';
+      nodesData.forEach(n=>{
+        const d=document.createElement('div');
+        d.className='node'+(selectedNode===n.id?' selected':'');
+        d.innerHTML=`<div style="font-weight:700">${n.name}</div><div style="font-size:12px;color:var(--muted)">${n.desc}</div>`;
+        d.onclick=()=>{selectedNode=n.id;renderNodes()};
+        nodesEl.appendChild(d);
+      })
+    }
+
+    function pickTask(){
+      const idx = Math.floor(Math.random()*tasksPool.length);
+      return JSON.parse(JSON.stringify(tasksPool[idx]));
+    }
+
+    function startTask(){
+      if(!selectedNode){alert('Choose a node first.');return}
+      if(credits<=0){alert('No credits left. Save score or refresh to reset.');return}
+      currentTask = pickTask();
+      optionsDisabled=false;
+      timeLeft = 25; // seconds
+      taskContent.textContent = currentTask.q;
+      renderOptions(currentTask.opts);
+      startTimer();
+    }
+
+    function renderOptions(opts){
+      optionsEl.innerHTML='';
+      opts.forEach((o,i)=>{
+        const b=document.createElement('div');
+        b.className='opt';
+        b.textContent = o;
+        b.onclick=()=>selectOption(i,b);
+        optionsEl.appendChild(b);
+      })
+    }
+
+    function selectOption(i,el){
+      if(optionsDisabled) return;
+      // mark as selected toggle
+      el.classList.toggle('selected');
+    }
+
+    function startTimer(){
+      clearInterval(timerInterval);
+      timerEl.textContent = timeLeft + 's';
+      timerInterval = setInterval(()=>{
+        timeLeft--;
+        timerEl.textContent = timeLeft + 's';
+        if(timeLeft<=0){
+          clearInterval(timerInterval);
+          evaluateTask();
+        }
+      },1000)
+    }
+
+    function evaluateTask(){
+      optionsDisabled=true;
+      const chosenEls = Array.from(optionsEl.querySelectorAll('.opt.selected'));
+      const chosenIdx = chosenEls.map(e=>Array.from(optionsEl.children).indexOf(e));
+      const correct = arraysEqual(chosenIdx.sort(), currentTask.ans.sort());
+      if(correct){
+        // reward depends on node reliability
+        const node = nodesData.find(n=>n.id===selectedNode);
+        const factor = node?node.reliability:0.9;
+        const gained = Math.ceil(10 * factor);
+        score += gained;
+        badges += 1;
+        credits += 2; // bonus
+        showMessage('Success! +' + gained + ' points', true);
+      } else {
+        // penalty
+        credits -= 3;
+        showMessage('Task failed. -3 credits', false);
+      }
+      updateUI();
+    }
+
+    function arraysEqual(a,b){
+      if(a.length!==b.length) return false;
+      for(let i=0;i<a.length;i++) if(a[i]!==b[i]) return false;
+      return true;
+    }
+
+    function showMessage(text,ok){
+      const prev = document.getElementById('msg'); if(prev) prev.remove();
+      const m = document.createElement('div'); m.id='msg'; m.textContent=text; m.style.marginTop='8px'; m.style.color= ok? '#b7f5d0':'#f8c6c6';
+      taskContent.parentNode.insertBefore(m, optionsEl.nextSibling);
+      setTimeout(()=>m.remove(),3000);
+    }
+
+    function updateUI(){
+      creditsEl.textContent = credits;
+      scoreEl.textContent = score;
+      badgesEl.textContent = badges;
+      // refresh leaderboard
+      renderLeaders();
+    }
+
+    function skipTask(){
+      if(credits<5){alert('Not enough credits to skip');return}
+      credits -=5; updateUI();
+      clearInterval(timerInterval); timerEl.textContent='--'; optionsEl.innerHTML=''; taskContent.textContent='Task skipped. Press Start Task.'; optionsDisabled=true;
+    }
+
+    function saveScore(){
+      const name = prompt('Enter name to save on leaderboard (short):','Player');
+      if(!name) return;
+      const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]');
+      table.push({name:name.slice(0,12),score,when:new Date().toISOString()});
+      table.sort((a,b)=>b.score-a.score);
+      localStorage.setItem('gensyn_leaders', JSON.stringify(table.slice(0,30)));
+      renderLeaders();
+      alert('Saved!');
+    }
+
+    function renderLeaders(){
+      const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]');
+      leadersEl.innerHTML='';
+      if(table.length===0){ leadersEl.innerHTML='<li style="list-style:none;color:var(--muted)">No scores yet</li>'; return}
+      table.slice(0,10).forEach(r=>{
+        const li=document.createElement('li'); li.innerHTML = `<span>${r.name}</span><strong>${r.score}</strong>`; leadersEl.appendChild(li);
+      })
+    }
+
+    function shareScore(){
+      const text = `I scored ${score} on Gensyn Compute Quest demo! Try it: (local demo)`;
+      const url = 'https://gensyn.ai';
+      const tw = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+      window.open(tw,'_blank');
+    }
+
+    // wire buttons
+    document.getElementById('startBtn').onclick = ()=>{ startTask(); };
+    document.getElementById('skipBtn').onclick = ()=>{ skipTask(); };
+    document.getElementById('saveScore').onclick = ()=>{ saveScore(); };
+    document.getElementById('shareBtn').onclick = ()=>{ shareScore(); };
+
+    // init
+    renderNodes(); updateUI(); renderLeaders();
+
+  </script>
+</body>
+</html>
