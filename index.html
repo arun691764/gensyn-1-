@@ -28,6 +28,7 @@
       font-weight: 900;
       color: #000;
     }
+    /* Welcome Overlay */
     .welcome-overlay {
       position: fixed;
       inset: 0;
@@ -43,9 +44,9 @@
       padding: 20px;
       border-radius: 12px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       color: #000;
       font-weight: bold;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
     .welcome-card h2 {
       margin-bottom: 8px;
@@ -86,14 +87,16 @@
     </div>
   </div>
 
+  <!-- Welcome Screen -->
   <div class="welcome-overlay" id="welcome">
     <div class="welcome-card">
-      <div style="margin-bottom: 12px; font-weight: bold;">Created by <a href="https://x.com/AmitKum955" target="_blank" class="xhandle">@AmitKum955</a> | Project <a href="https://x.com/gensyn" target="_blank" class="xhandle">@gensyn</a></div>
+      <div style="margin-bottom: 12px;">
+        Created by <a href="https://x.com/AmitKum955" target="_blank" class="xhandle">@AmitKum955</a> | Project <a href="https://x.com/gensyn" target="_blank" class="xhandle">@gensyn</a>
+      </div>
       <h2>Welcome to Gensyn Compute Quest</h2>
-      <p>This game helps you learn about the Gensyn project. Answer correctly to earn your batch!</p>
-      <p><strong>How to Play:</strong><br>Enter your name, then start the task. Each question has 20 seconds. Answer correctly to increase your score. If you score above 75%, you'll earn a gold medal batch!</p>
+      <p>This quiz will test your knowledge of the Gensyn project.<br>Answer questions within 20 seconds each and try to score above 75% to win your Gold Medal Batch!</p>
       <div style="margin-top:10px;">
-        <input id="playerName" placeholder="Enter your name" style="padding:8px;border-radius:8px;border:1px solid #ccc;width:80%" />
+        <input id="playerName" placeholder="Enter your name" style="padding:8px;border-radius:8px;border:1px solid #000;width:80%;font-weight:bold;" />
       </div>
       <div style="margin-top:14px;">
         <button id="startGame">Start Task</button>
@@ -169,7 +172,7 @@
       optEl.innerHTML='';
       if((score/questions.length)>=0.75){
         const medal=document.createElement('div');
-        medal.innerHTML=`🏅 <strong>${name}</strong> earned <span style="color:gold;font-weight:bold">Gensyn Gold Batch</span>! <br><a href="https://x.com/AmitKum955" target="_blank" class="xhandle">@AmitKum955</a> | <a href="https://x.com/gensyn" target="_blank" class="xhandle">@gensyn</a>`;
+        medal.innerHTML=`🏅 <strong>${name}</strong> earned <span style=\"color:gold;font-weight:bold\">Gensyn Gold Batch</span>!<br><a href=\"https://x.com/AmitKum955\" target=\"_blank\" class=\"xhandle\">@AmitKum955</a> | <a href=\"https://x.com/gensyn\" target=\"_blank\" class=\"xhandle\">@gensyn</a>`;
         medal.style.marginTop='20px';
         qEl.appendChild(medal);
       }
