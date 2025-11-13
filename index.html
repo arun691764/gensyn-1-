@@ -131,7 +131,7 @@
       </aside>
     </div>
 
-    <footer>Made for Gensyn-style contribution demo • <a class="xhandle" href="https://x.com/AmitKum955" target="_blank">@AmitKum955</a> • <a class="xhandle" href="https://x.com/GensynAI" target="_blank">@GensynAI</a></footer>
+    <footer style="display:flex;justify-content:space-between;align-items:center">Made for Gensyn-style contribution demo • <span>Created by — <a class="xhandle" href="https://x.com/AmitKum955" target="_blank">@AmitKum955</a></span> • <span>Project X — <a class="xhandle" href="https://x.com/GensynAI" target="_blank">@GensynAI</a></span><div></div></footer>
   </div>
 
   <!-- Welcome overlay (MINIMAL): only welcome, short game description & rewards + Start Quiz -->
@@ -188,9 +188,11 @@
       </div>
       <div style="font-weight:800;font-size:18px;color:#b45309" id="badgeTitle">Gensyn Certified Compute Explorer</div>
       <div style="margin-top:8px;color:#0b3b52" id="badgeTo">Awarded to: <strong id="badgeName">Player</strong></div>
+      <div style="margin-top:6px;color:#0b3b52">Project: <span id="badgeProject">@GensynAI</span></div>
       <div style="margin-top:6px;color:#0b3b52">Handles: <span id="badgeHandles">@AmitKum955 • @GensynAI</span></div>
       <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
         <button id="downloadBadge">Download Badge</button>
+        <button id="shareBadge" class="muted-btn">Share on X</button>
         <button class="muted-btn" id="closeBadge">Close</button>
       </div>
     </div>
@@ -327,6 +329,30 @@
 
     // init
     renderNodes(); updateUI(); renderLeaders();
+
+    // ensure welcome overlay and Start Quiz button are visible on load
+    try{
+      const welcome = document.getElementById('welcome');
+      const openBtn = document.getElementById('openNameModal');
+      if(welcome) welcome.style.display = 'flex';
+      if(openBtn) openBtn.style.display = 'inline-block';
+    }catch(e){/* ignore */}
+
+    // share badge button: opens X intent with prefilled text
+    const shareBadgeBtn = document.getElementById('shareBadge');
+    if(shareBadgeBtn){
+      shareBadgeBtn.addEventListener('click', ()=>{
+        const name = document.getElementById('badgeName').textContent || 'Player';
+        const project = document.getElementById('badgeProject').textContent || '@GensynAI';
+        const text = `I just earned the Gensyn Verified Compute Badge — ${name} (${project})! Try the Compute Quest demo.`;
+        const url = window.location.href || '';
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,'_blank');
+      });
+    }
+    // ensure badge project handle is set on init
+    try{ const bp = document.getElementById('badgeProject'); if(bp) bp.textContent = '@GensynAI'; }catch(e){}
+    });
+    }
   </script>
 </body>
 </html>
