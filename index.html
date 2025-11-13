@@ -3,12 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Gensyn — Compute Quest</title>
+<title>Gensyn — Compute Quest (Fixed Start)</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --accent1:#7c3aed; --accent2:#06b6d4; --muted:#33506b;
-  }
+  :root{--accent1:#7c3aed; --accent2:#06b6d4; --muted:#33506b}
   *{box-sizing:border-box;font-family:Poppins,system-ui,Arial,sans-serif}
   body{margin:0;background:linear-gradient(180deg,#f0f8ff 0%,#dff4ff 100%);color:#04243a;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
   .wrap{width:980px;max-width:860px;background:#fff;border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(2,6,23,0.08)}
@@ -19,7 +17,7 @@
   .row{display:flex;gap:14px;margin-top:14px}
   .left{flex:1}
   .right{width:320px}
-  .card{padding:14px;border-radius:12px;border:1px solid rgba(4,36,58,0.04);background:#ffffff10}
+  .card{padding:14px;border-radius:12px;border:1px solid rgba(4,36,58,0.04);background:#ffffff}
   .nodes{display:flex;gap:8px;margin-top:8px}
   .node{flex:1;padding:12px;border-radius:10px;text-align:center;cursor:pointer;border:1px solid rgba(4,36,58,0.06);background:#fafafa}
   .node.selected{box-shadow:0 8px 20px rgba(124,58,237,0.12);background:linear-gradient(90deg,rgba(124,58,237,0.06),rgba(6,182,212,0.04))}
@@ -32,9 +30,8 @@
   .controls{display:flex;align-items:center;gap:10px;margin-top:12px}
   button.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:0;color:#02141a;padding:10px 16px;border-radius:10px;font-weight:800;cursor:pointer}
   button.ghost{background:transparent;border:1px solid rgba(4,36,58,0.06);padding:8px 12px;border-radius:8px;cursor:pointer}
-  .stats div{margin-bottom:6px}
   footer{margin-top:14px;color:#6b7e8a;font-size:13px;display:flex;justify-content:space-between}
-  /* Welcome overlay - Premium gold as requested */
+  /* overlays */
   .overlay{position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.28),rgba(0,0,0,0.32));display:flex;align-items:center;justify-content:center;z-index:40}
   .welcome-card{width:820px;max-width:94%;background:linear-gradient(180deg,#fffaf0 0%,#fff4e6 100%);padding:26px;border-radius:14px;box-shadow:0 30px 80px rgba(180,120,20,0.12)}
   .welcome-title{font-family:Orbitron;font-size:28px;margin:0 0 8px}
@@ -85,7 +82,6 @@
             <div class="options" id="options" aria-live="polite"></div>
 
             <div class="controls" style="margin-top:12px">
-              <!-- during quiz, these will be shown -->
               <button id="submitAnswer" class="primary" style="display:none">Submit Answer</button>
               <button id="skipBtn" class="ghost" style="display:none">Skip (cost 5)</button>
               <div style="margin-left:auto;color:#6b7e8a">Timer: <span id="timer">--</span></div>
@@ -214,8 +210,8 @@ const tasks = [
   {q:'Which outcomes does Gensyn aim to improve? (select two)', opts:['Scaling ML beyond centralized limits','Restricting access','Standardizing ML execution','Vendor lock-in'], ans:[0,2]},
 ];
 
-let playerName = '';       // default empty (you requested)
-let playerHandle = '';     // default empty
+let playerName = '';
+let playerHandle = '';
 let selectedNode = null;
 let credits = 20, score = 0, badges = 0;
 let asked = 0, correct = 0;
@@ -260,7 +256,7 @@ const shareBtn = document.getElementById('shareBtn');
 /* --- Helpers --- */
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
 function updateUI(){ creditsEl.textContent=credits; scoreEl.textContent=score; badgesEl.textContent=badges; playerDisplay.textContent = playerName ? (playerName + (playerHandle ? '  ' + playerHandle : '')) : '—'; renderLeaders(); }
-function renderLeaders(){ const t = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]'); leadersEl.innerHTML=''; if(t.length===0){ leadersEl.innerHTML='<li style=\"color:#6b7e8a\">No scores yet</li>'; return } t.slice(0,8).forEach(r=>{ const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginBottom='6px'; li.innerHTML = `<span>${r.name}</span><strong>${r.score}</strong>`; leadersEl.appendChild(li); }); }
+function renderLeaders(){ const t = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]'); leadersEl.innerHTML=''; if(t.length===0){ leadersEl.innerHTML='<li style="color:#6b7e8a">No scores yet</li>'; return } t.slice(0,8).forEach(r=>{ const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginBottom='6px'; li.innerHTML = `<span>${r.name}</span><strong>${r.score}</strong>`; leadersEl.appendChild(li); }); }
 
 /* --- Nodes --- */
 const nodeData = [
@@ -309,10 +305,17 @@ confirmStart.addEventListener('click', ()=> {
   playerName = name.slice(0,24); playerHandle = handle ? handle.slice(0,24) : '';
   nameModal.style.display='none';
   welcomeOverlay.style.display='none';
+  // If user didn't choose node, auto-select first node (prevents blocking)
+  if(!selectedNode){
+    selectedNode = nodeData[0].id;
+    // mark visually
+    Array.from(nodesEl.children).forEach((c,i)=>{ c.classList.remove('selected'); if(i===0) c.classList.add('selected'); });
+    // inform user inline
+    taskContent.textContent = `Selected default node: ${nodeData[0].name}. Starting quiz...`;
+  }
   // prepare and start
   prepareSession();
-  startQuestion();
-  updateUI();
+  setTimeout(()=>{ startQuestion(); updateUI(); }, 250);
 });
 
 /* --- Questions --- */
@@ -332,12 +335,10 @@ function renderOptions(opts, isMulti){
     b.dataset.index = i;
     b.onclick = ()=>{
       if(isMulti){
-        // toggle
         const idx = multiSelected.indexOf(i);
         if(idx===-1){ multiSelected.push(i); b.classList.add('selected'); }
         else { multiSelected.splice(idx,1); b.classList.remove('selected'); }
       } else {
-        // single select -> evaluate immediately
         Array.from(optionsEl.children).forEach(c=>c.classList.remove('selected'));
         b.classList.add('selected');
         evaluate([i]);
@@ -363,16 +364,14 @@ function startTimer(sec=30){
 
 function evaluate(selected){
   clearInterval(timer);
-  // mark visuals
-  const correct = current.ans.slice().sort();
-  const chosen = (selected||multiSelected||[]).slice().sort();
+  const correct = current.ans.slice().sort((a,b)=>a-b);
+  const chosen = (selected||multiSelected||[]).slice().sort((a,b)=>a-b);
   Array.from(optionsEl.children).forEach((c,idx)=>{
     c.classList.remove('correct','wrong','selected');
     if(correct.includes(idx)) c.classList.add('correct');
     if(chosen.includes(idx) && !correct.includes(idx)) c.classList.add('wrong');
   });
 
-  // check equality
   const ok = (chosen.length === correct.length) && chosen.every((v,i)=>v===correct[i]);
   if(ok){
     const node = nodeData.find(n=>n.id === selectedNode) || nodeData[0];
@@ -381,7 +380,7 @@ function evaluate(selected){
     showTempMessage(`Correct! +${gain} points`, true);
   } else {
     credits -= 3;
-    showTempMessage(selected.length===0 ? 'Time out! -3 credits' : 'Incorrect. -3 credits', false);
+    showTempMessage((chosen.length===0) ? 'Time out! -3 credits' : 'Incorrect. -3 credits', false);
   }
   updateUI();
 
@@ -403,7 +402,12 @@ function showTempMessage(txt, ok){
 /* --- Main runner --- */
 function startQuestion(){
   if(!playerName){ alert('Please enter your name first.'); return; }
-  if(!selectedNode){ alert('Choose a node before starting.'); return; }
+  // auto-select node if missing (failsafe)
+  if(!selectedNode){
+    selectedNode = nodeData[0].id;
+    Array.from(nodesEl.children).forEach((c,i)=>{ c.classList.remove('selected'); if(i===0) c.classList.add('selected'); });
+    taskContent.textContent = `Selected default node: ${nodeData[0].name}. Starting quiz...`;
+  }
   current = getNext();
   if(!current){ finishQuiz(); return; }
   taskContent.textContent = current.q;
@@ -430,18 +434,14 @@ function finishQuiz(){
 
   if(percent >= 75){
     setTimeout(()=> showBadge(), 600);
-  } else {
-    // no badge
   }
-  // ask to save
   setTimeout(()=> {
     if(confirm('Save your score to leaderboard?')) saveScore();
   },800);
 }
 
 function restartToStart(){
-  // reset but keep player name; show welcome overlay so user can re-start fresh
-  // you asked to always ask name: we'll clear name so modal shows next time
+  // clear name so user is asked next time (as requested)
   playerName = ''; playerHandle = ''; selectedNode = null; credits = 20; score = 0; badges = 0; asked = 0; correct = 0;
   sessionOrder = []; current = null;
   renderNodes(); updateUI();
@@ -450,7 +450,7 @@ function restartToStart(){
   nameModal.style.display = 'none';
 }
 
-/* --- Badge functions --- */
+/* --- Badge --- */
 function showBadge(){
   badgeNameEl.textContent = playerName || 'Player';
   badgeHandlesEl.textContent = (playerHandle || '') + (playerHandle ? ' • ' : '') + '@AmitKum955 • @GensynAI';
@@ -458,18 +458,16 @@ function showBadge(){
 }
 closeBadge.addEventListener('click', ()=> badgeModal.style.display = 'none');
 downloadBadge.addEventListener('click', ()=> {
-  // simple PNG generation (badge preview)
-  const c = document.createElement('canvas'); c.width = 800; c.height = 800; const ctx = c.getContext('2d');
-  ctx.fillStyle = '#fff7e6'; ctx.fillRect(0,0,c.width,c.height);
-  ctx.fillStyle = '#b45309'; ctx.font = 'bold 36px Poppins, sans-serif'; ctx.textAlign = 'center';
+  const c = document.createElement('canvas'); c.width=800; c.height=800; const ctx=c.getContext('2d');
+  ctx.fillStyle='#fff7e6'; ctx.fillRect(0,0,c.width,c.height);
+  ctx.fillStyle='#b45309'; ctx.font='bold 36px Poppins, sans-serif'; ctx.textAlign='center';
   ctx.fillText('Verified Compute Badge',400,120);
-  ctx.fillStyle = '#000'; ctx.font = 'bold 48px Poppins, sans-serif'; ctx.fillText(playerName || 'Player',400,420);
+  ctx.fillStyle='#000'; ctx.font='bold 48px Poppins, sans-serif'; ctx.fillText(playerName || 'Player',400,420);
   const url = c.toDataURL('image/png'); const a = document.createElement('a'); a.href = url; a.download = `${(playerName||'player').replace(/\s+/g,'_')}_gensyn_badge.png`; a.click();
 });
 shareBadge.addEventListener('click', ()=> {
   const text = `I earned the Gensyn Verified Compute Badge — ${playerName || 'Player'} @GensynAI`;
-  const url = location.href;
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`, '_blank');
 });
 
 /* --- Save & share --- */
