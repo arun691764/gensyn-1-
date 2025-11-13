@@ -1,49 +1,48 @@
 <!doctype html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Gensyn — Compute Quest (Immediate Answer + Sound)</title>
+<title>Gensyn — Compute Quest (Immediate Click Fixed)</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --accent1:#4c1d95; --accent2:#0ea5a4; --muted:#33506b;
-    --good:#036a4f; --bad:#7b1220;
-  }
-  *{box-sizing:border-box;font-family:Poppins,system-ui,Arial,sans-serif}
-  body{margin:0;background:linear-gradient(180deg,#f0f8ff 0%,#e8f6ff 100%);color:#04243a;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
-  .wrap{width:980px;max-width:860px;background:#fff;border-radius:14px;padding:18px;box-shadow:0 18px 40px rgba(2,6,23,0.08)}
-  header{display:flex;align-items:center;gap:12px}
-  .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:20px;font-family:Orbitron}
-  h1{margin:0;font-size:22px;font-family:Orbitron}
-  .credit{margin-left:auto;color:#056a86;font-weight:700}
-  .row{display:flex;gap:14px;margin-top:14px}
-  .left{flex:1}
-  .right{width:320px}
-  .card{padding:14px;border-radius:12px;border:1px solid rgba(4,36,58,0.04);background:#ffffff}
-  .nodes{display:flex;gap:8px;margin-top:8px}
-  .node{flex:1;padding:12px;border-radius:10px;text-align:center;cursor:pointer;border:1px solid rgba(4,36,58,0.06);background:#fafafa;font-weight:700}
-  .node.selected{box-shadow:0 10px 30px rgba(76,29,149,0.14);background:linear-gradient(90deg,rgba(76,29,149,0.06),rgba(14,165,164,0.04))}
-  .task-title{font-weight:900;margin-bottom:8px}
-  .options{display:flex;flex-direction:column;gap:12px;margin-top:8px}
-  .opt{padding:14px;border-radius:12px;background:#fff;border:1px solid rgba(4,36,58,0.06);cursor:pointer;font-weight:800;transition:transform .06s ease,box-shadow .06s ease}
-  .opt:hover{transform:translateX(6px)}
-  .opt.correct{background:linear-gradient(90deg,var(--good),#0b8b67);color:#fff;border-color:#044d38;box-shadow:0 12px 30px rgba(3,106,79,0.18)}
-  .opt.wrong{background:linear-gradient(90deg,var(--bad),#a11b2a);color:#fff;border-color:#5b0f14;box-shadow:0 12px 30px rgba(123,18,32,0.16)}
-  .controls{display:flex;align-items:center;gap:10px;margin-top:12px}
-  button.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:0;color:#fff;padding:10px 16px;border-radius:10px;font-weight:800;cursor:pointer}
-  button.ghost{background:transparent;border:1px solid rgba(4,36,58,0.06);padding:8px 12px;border-radius:8px;cursor:pointer}
-  footer{margin-top:14px;color:#6b7e8a;font-size:13px;display:flex;justify-content:space-between}
-  /* overlays */
-  .overlay{position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.28),rgba(0,0,0,0.32));display:flex;align-items:center;justify-content:center;z-index:40}
-  .welcome-card{width:820px;max-width:94%;background:linear-gradient(180deg,#fffaf0 0%,#fff4e6 100%);padding:26px;border-radius:14px;box-shadow:0 30px 80px rgba(180,120,20,0.12)}
-  .welcome-title{font-family:Orbitron;font-size:28px;margin:0 0 8px}
-  .rewards-card{margin:0 auto 16px;max-width:640px;padding:18px;border-radius:12px;background:linear-gradient(90deg,#fff5d6,#ffe59b);color:#1a1200;font-weight:900;box-shadow:0 8px 28px rgba(180,140,20,0.10)}
-  .name-modal{width:640px;max-width:92%;background:#fff;padding:20px;border-radius:12px;box-shadow:0 18px 48px rgba(2,6,23,0.08)}
-  .badge-modal{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:flex;align-items:center;justify-content:center;z-index:50}
-  .badge-card{background:linear-gradient(90deg,#fff9eb,#fff7e6);padding:20px;border-radius:12px;text-align:center;box-shadow:0 30px 80px rgba(4,36,58,0.12)}
-  .medal{width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #ffd54a, #f59e0b 60%, #b45309 100%);display:flex;align-items:center;justify-content:center;margin:12px auto}
-  @media(max-width:900px){.row{flex-direction:column}.right{width:100%}.welcome-card{width:92%}}
+:root{
+  --accent1:#4c1d95; --accent2:#0ea5a4; --muted:#33506b;
+  --good:#036a4f; --bad:#7b1220;
+}
+*{box-sizing:border-box;font-family:Poppins,system-ui,Arial,sans-serif}
+body{margin:0;background:linear-gradient(180deg,#f0f8ff 0%,#e8f6ff 100%);color:#04243a;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
+.wrap{width:980px;max-width:860px;background:#fff;border-radius:14px;padding:18px;box-shadow:0 18px 40px rgba(2,6,23,0.08)}
+header{display:flex;align-items:center;gap:12px}
+.logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:20px;font-family:Orbitron}
+h1{margin:0;font-size:22px;font-family:Orbitron}
+.credit{margin-left:auto;color:#056a86;font-weight:700}
+.row{display:flex;gap:14px;margin-top:14px}
+.left{flex:1}
+.right{width:320px}
+.card{padding:14px;border-radius:12px;border:1px solid rgba(4,36,58,0.04);background:#ffffff}
+.nodes{display:flex;gap:8px;margin-top:8px}
+.node{flex:1;padding:12px;border-radius:10px;text-align:center;cursor:pointer;border:1px solid rgba(4,36,58,0.06);background:#fafafa;font-weight:700}
+.node.selected{box-shadow:0 10px 30px rgba(76,29,149,0.14);background:linear-gradient(90deg,rgba(76,29,149,0.06),rgba(14,165,164,0.04))}
+.task-title{font-weight:900;margin-bottom:8px}
+.options{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.opt{padding:14px;border-radius:12px;background:#fff;border:1px solid rgba(4,36,58,0.06);cursor:pointer;font-weight:800;transition:transform .06s ease,box-shadow .06s ease; user-select:none}
+.opt:hover{transform:translateX(6px)}
+.opt.correct{background:linear-gradient(90deg,var(--good),#0b8b67);color:#fff;border-color:#044d38;box-shadow:0 12px 30px rgba(3,106,79,0.18)}
+.opt.wrong{background:linear-gradient(90deg,var(--bad),#a11b2a);color:#fff;border-color:#5b0f14;box-shadow:0 12px 30px rgba(123,18,32,0.16)}
+.controls{display:flex;align-items:center;gap:10px;margin-top:12px}
+button.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:0;color:#fff;padding:10px 16px;border-radius:10px;font-weight:800;cursor:pointer}
+button.ghost{background:transparent;border:1px solid rgba(4,36,58,0.06);padding:8px 12px;border-radius:8px;cursor:pointer}
+footer{margin-top:14px;color:#6b7e8a;font-size:13px;display:flex;justify-content:space-between}
+.overlay{position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.28),rgba(0,0,0,0.32));display:flex;align-items:center;justify-content:center;z-index:40}
+.welcome-card{width:820px;max-width:94%;background:linear-gradient(180deg,#fffaf0 0%,#fff4e6 100%);padding:26px;border-radius:14px;box-shadow:0 30px 80px rgba(180,120,20,0.12)}
+.welcome-title{font-family:Orbitron;font-size:28px;margin:0 0 8px}
+.rewards-card{margin:0 auto 16px;max-width:640px;padding:18px;border-radius:12px;background:linear-gradient(90deg,#fff5d6,#ffe59b);color:#1a1200;font-weight:900;box-shadow:0 8px 28px rgba(180,140,20,0.10)}
+.name-modal{width:640px;max-width:92%;background:#fff;padding:20px;border-radius:12px;box-shadow:0 18px 48px rgba(2,6,23,0.08)}
+.badge-modal{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:flex;align-items:center;justify-content:center;z-index:50}
+.badge-card{background:linear-gradient(90deg,#fff9eb,#fff7e6);padding:20px;border-radius:12px;text-align:center;box-shadow:0 30px 80px rgba(4,36,58,0.12)}
+.medal{width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #ffd54a, #f59e0b 60%, #b45309 100%);display:flex;align-items:center;justify-content:center;margin:12px auto}
+@media(max-width:900px){.row{flex-direction:column}.right{width:100%}.welcome-card{width:92%}}
 </style>
 </head>
 <body>
@@ -246,21 +245,28 @@ const closeBadge = document.getElementById('closeBadge');
 const saveScoreBtn = document.getElementById('saveScore');
 const shareBtn = document.getElementById('shareBtn');
 
-/* Audio feedback (Web Audio) */
+/* Audio (Web Audio) */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function ensureAudio() {
+  if(audioCtx.state === 'suspended') {
+    audioCtx.resume().catch(()=>{/* ignore */});
+  }
+}
 function playTone(type='correct'){
-  // short tone: correct=higher, wrong=lower
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.type = 'sine';
-  if(type==='correct'){ o.frequency.value = 880; } else { o.frequency.value = 220; }
-  g.gain.value = 0.0001;
-  o.connect(g); g.connect(audioCtx.destination);
-  const now = audioCtx.currentTime;
-  g.gain.exponentialRampToValueAtTime(0.12, now + 0.01);
-  o.start(now);
-  g.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
-  o.stop(now + 0.2);
+  try {
+    ensureAudio();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine';
+    o.frequency.value = (type==='correct')?880:220;
+    g.gain.value = 0.0001;
+    o.connect(g); g.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    g.gain.exponentialRampToValueAtTime(0.12, now + 0.01);
+    o.start(now);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+    o.stop(now + 0.2);
+  } catch(e){ /* ignore audio errors */ }
 }
 
 /* Helpers */
@@ -293,7 +299,7 @@ function renderNodes(){
 /* Session */
 function prepareSession(){ sessionOrder = tasks.map((_,i)=>i); shuffle(sessionOrder); asked = 0; correct = 0; gaveBadge = 0; }
 
-/* Flow: start/name */
+/* Start flow */
 startQuizBtn.addEventListener('click', ()=> { nameModal.style.display='flex'; modalName.value=''; modalHandle.value=''; modalName.focus(); });
 cancelStart.addEventListener('click', ()=> { nameModal.style.display='none'; });
 
@@ -314,9 +320,7 @@ confirmStart.addEventListener('click', ()=> {
   setTimeout(()=> { startQuestion(); updateUI(); }, 250);
 });
 
-/* Questions: single-click evaluate */
-function getNext(){ if(asked >= sessionOrder.length) return null; const idx = sessionOrder[asked++]; return JSON.parse(JSON.stringify(tasks[idx])); }
-
+/* Render options (delegated listener below ensures clicks are always caught) */
 function renderOptions(opts){
   optionsEl.innerHTML = '';
   opts.forEach((o,i)=>{
@@ -324,13 +328,24 @@ function renderOptions(opts){
     b.className = 'opt';
     b.textContent = o;
     b.dataset.index = i;
-    b.onclick = ()=> {
-      // immediate evaluate
-      evaluate([i]);
-    }
     optionsEl.appendChild(b);
   });
 }
+
+/* Delegated click handler on options container (robust) */
+let optionLocked = false;
+optionsEl.addEventListener('click', (ev)=>{
+  const opt = ev.target.closest('.opt');
+  if(!opt || optionLocked) return;
+  // ensure the click originated inside current options
+  if(!optionsEl.contains(opt)) return;
+  optionLocked = true; // prevent re-entry until handled
+  const idx = Number(opt.dataset.index);
+  // immediate visual active state
+  opt.classList.add('selected');
+  // evaluate selection
+  evaluate([idx]).finally(()=>{ optionLocked = false; });
+});
 
 /* timer (20s) */
 function startTimer(sec=20){
@@ -344,58 +359,61 @@ function startTimer(sec=20){
   },1000);
 }
 
+/* Evaluate returns a Promise so caller (delegation) can await unlocking */
 function evaluate(selected){
-  clearInterval(timer);
-  // mark visuals
-  const correctIdx = (current.ans||[]).slice().sort((a,b)=>a-b);
-  const chosen = (selected||[]).slice().sort((a,b)=>a-b);
-  Array.from(optionsEl.children).forEach((c,idx)=>{
-    c.classList.remove('correct','wrong','selected');
-    if(correctIdx.includes(idx)) c.classList.add('correct');
-    if(chosen.includes(idx) && !correctIdx.includes(idx)) c.classList.add('wrong');
+  return new Promise(resolve=>{
+    clearInterval(timer);
+    const correctIdx = (current.ans||[]).slice().sort((a,b)=>a-b);
+    const chosen = (selected||[]).slice().sort((a,b)=>a-b);
+
+    // mark visuals
+    Array.from(optionsEl.children).forEach((c,idx)=>{
+      c.classList.remove('correct','wrong','selected');
+      if(correctIdx.includes(idx)) c.classList.add('correct');
+      if(chosen.includes(idx) && !correctIdx.includes(idx)) c.classList.add('wrong');
+    });
+
+    // decide correctness
+    const exact = (chosen.length === correctIdx.length) && chosen.every((v,i)=>v===correctIdx[i]);
+    const singleCorrect = (chosen.length===1 && correctIdx.includes(chosen[0]) && correctIdx.length===1);
+    const ok = exact || singleCorrect;
+
+    // sound + update stats
+    try{ playTone(ok ? 'correct' : 'wrong'); }catch(e){/*ignore*/}
+
+    if(ok){
+      const node = nodeData.find(n=>n.id === selectedNode) || nodeData[0];
+      const gain = Math.ceil(10 * node.reliability);
+      score += gain; credits += 2; correct++;
+      showTempMessage(`Correct! +${gain} points`, true);
+    } else {
+      credits -= 3;
+      showTempMessage((chosen.length===0) ? 'Time out! -3 credits' : 'Incorrect. -3 credits', false);
+    }
+    updateUI();
+
+    // brief pause to display colors, then next question or finish
+    setTimeout(()=> {
+      if(asked >= sessionOrder.length || credits <= 0){ finishQuiz(); resolve(); }
+      else { startQuestion(); resolve(); }
+    }, 650); // 650ms pause
   });
-
-  // decide correctness
-  const exact = (chosen.length === correctIdx.length) && chosen.every((v,i)=>v===correctIdx[i]);
-  const singleCorrect = (chosen.length===1 && correctIdx.includes(chosen[0]) && correctIdx.length===1);
-  const ok = exact || singleCorrect;
-
-  // play sound
-  try{ playTone(ok ? 'correct' : 'wrong'); } catch(e){ /* ignore audio errors */ }
-
-  if(ok){
-    const node = nodeData.find(n=>n.id === selectedNode) || nodeData[0];
-    const gain = Math.ceil(10 * node.reliability);
-    score += gain; credits += 2; correct++;
-    showTempMessage(`Correct! +${gain} points`, true);
-  } else {
-    credits -= 3;
-    showTempMessage((chosen.length===0) ? 'Time out! -3 credits' : 'Incorrect. -3 credits', false);
-  }
-  updateUI();
-
-  // short pause to display colors, then next
-  setTimeout(()=> {
-    if(asked >= sessionOrder.length || credits <= 0){ finishQuiz(); }
-    else startQuestion();
-  },700); // 700ms pause
 }
 
-/* runner */
+/* runner: getNext/startQuestion/finish/restart */
+function getNext(){ if(asked >= sessionOrder.length) return null; const idx = sessionOrder[asked++]; return JSON.parse(JSON.stringify(tasks[idx])); }
 function startQuestion(){
   if(!playerName){ alert('Please enter your name first.'); return; }
-  if(!selectedNode){
-    selectedNode = nodeData[0].id;
-    Array.from(nodesEl.children).forEach((c,i)=>{ c.classList.remove('selected'); if(i===0) c.classList.add('selected'); });
-  }
+  if(!selectedNode){ selectedNode = nodeData[0].id; Array.from(nodesEl.children).forEach((c,i)=>{ c.classList.remove('selected'); if(i===0) c.classList.add('selected'); }); }
   current = getNext();
   if(!current){ finishQuiz(); return; }
   taskContent.textContent = current.q;
   renderOptions(current.opts);
+  // ensure audio context can play after user gesture (resume)
+  try{ audioCtx.resume(); }catch(e){}
   startTimer(20);
 }
 
-/* finish */
 function finishQuiz(){
   clearInterval(timer);
   optionsEl.innerHTML = '';
@@ -426,6 +444,14 @@ function restartToStart(){
   renderNodes(); updateUI();
   welcomeOverlay.style.display = 'flex';
   nameModal.style.display = 'none';
+}
+
+/* UI helpers */
+function showTempMessage(txt, ok){
+  const prev = document.getElementById('msg'); if(prev) prev.remove();
+  const msg = document.createElement('div'); msg.id='msg'; msg.textContent = txt; msg.style.marginTop='8px'; msg.style.color = ok ? '#064e3b' : '#7f1d1d';
+  taskContent.parentNode.insertBefore(msg, optionsEl.nextSibling);
+  setTimeout(()=>{ if(msg) msg.remove(); },1100);
 }
 
 /* badge */
