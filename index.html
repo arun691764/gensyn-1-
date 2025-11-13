@@ -136,17 +136,31 @@
 
   <!-- Welcome overlay (MINIMAL): only welcome, short game description & rewards + Start Quiz -->
   <div class="welcome-overlay" id="welcome" style="display:flex">
-    <div class="welcome-card">
-      <h2 style="margin:0 0 8px;color:#04243a;font-family:'Orbitron',sans-serif">WELCOME — GENSYN COMPUTE QUEST</h2>
-      <p class="qsmall">A short, focused quiz to learn the core ideas behind Gensyn (decentralised ML compute). Complete the quiz to earn badges and leaderboard recognition.</p>
-      <div style="margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(90deg,#ffe259,#ffcc00);color:#001;font-weight:900;text-align:center">Rewards: Earn points, badges and a Verified Compute Badge for top scorers (≥75%).</div>
-      <div style="display:flex;justify-content:center;margin-top:16px">
-        <button id="openNameModal" style="font-size:18px;padding:12px 22px">Start Quiz</button>
+    <div class="welcome-card" style="width:820px;max-width:96%;padding:28px;background:linear-gradient(180deg,#fffaf0 0%,#fff4e6 100%);border:1px solid rgba(180,140,30,0.12);box-shadow:0 30px 80px rgba(180,120,20,0.12)">
+      <h2 style="margin:0 0 10px;color:#2b1f00;font-family:'Orbitron',sans-serif;font-size:30px;font-weight:900;text-align:center">WELCOME — GENSYN COMPUTE QUEST</h2>
+      <p class="qsmall" style="font-size:15px;text-align:center;color:#3a2a00;font-weight:700;margin-bottom:14px">A focused quiz to learn the core ideas behind Gensyn's decentralized ML compute. Play to earn recognition and prove your knowledge.</p>
+
+      <div style="margin:0 auto 18px;max-width:640px;padding:18px;border-radius:12px;background:linear-gradient(90deg,#fff5d6,#ffe59b);color:#1a1200;font-weight:900;text-align:left;font-size:15px;box-shadow:0 8px 28px rgba(180,140,20,0.10)">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="font-size:20px">🎁</div>
+          <div>
+            <div style="font-weight:900;margin-bottom:6px">Rewards — clear & simple</div>
+            <ul style="margin:0;padding-left:18px;color:#312400;font-weight:700">
+              <li>Points for each correct answer (use for leaderboard).</li>
+              <li>Earn <strong>Badges</strong> for consistent performance.</li>
+              <li>Score ≥ 75% → unlock <strong>Verified Compute Badge</strong> (downloadable).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:center;margin-top:8px">
+        <button id="openNameModal" style="font-size:20px;padding:14px 28px;border-radius:12px;background:linear-gradient(90deg,#b7791f,#ffd166);color:#fff;font-weight:900;cursor:pointer;box-shadow:0 10px 30px rgba(180,120,20,0.18)">Start Quiz</button>
       </div>
     </div>
   </div>
 
-  <!-- Name modal shown AFTER Start Quiz clicked (asks name & handle) -->
+  <!-- Name modal shown AFTER Start Quiz" clicked (asks name & handle) -->
   <div class="welcome-overlay" id="nameModal" style="display:none">
     <div class="welcome-card">
       <h3 style="margin:0 0 8px;color:#04243a">Enter your details</h3>
@@ -307,7 +321,7 @@
     document.getElementById('saveScore').onclick = ()=>{ saveScore(false); };
     document.getElementById('shareBtn').onclick = ()=>{ shareScore(); };
 
-    function updatePlayerDisplay(){ playerDisplay.textContent = 'Player: ' + (playerName || '—'); }
+    function updatePlayerDisplay(){ playerDisplay.textContent = 'Player: ' + (playerName || '—') + (playerHandle ? '  ' + playerHandle : ''); }
 
     function downloadBadgeImage(){ const name = playerName || 'Player'; const handles = [playerHandle || '', '@AmitKum955', '@GensynAI'].filter(Boolean).join(' • '); const c=document.createElement('canvas'); c.width=800; c.height=800; const ctx=c.getContext('2d'); ctx.fillStyle='#fff7e6'; ctx.fillRect(0,0,c.width,c.height); const cx=400,cy=300,r=200; const grad=ctx.createRadialGradient(cx-60,cy-60,50,cx,cy,220); grad.addColorStop(0,'#ffd54a'); grad.addColorStop(0.6,'#f59e0b'); grad.addColorStop(1,'#b45309'); ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fillStyle=grad; ctx.fill(); ctx.beginPath(); ctx.arc(cx,cy,130,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.fillStyle='#b45309'; ctx.font='bold 56px Poppins, sans-serif'; ctx.textAlign='center'; ctx.fillText('🏅',cx,cy+18); ctx.fillStyle='#04243a'; ctx.font='bold 28px Poppins, sans-serif'; ctx.fillText(name,cx,cy+220); ctx.fillStyle='#056a86'; ctx.font='18px Poppins, sans-serif'; ctx.fillText(handles,cx,cy+260); const url=c.toDataURL('image/png'); const a=document.createElement('a'); a.href=url; a.download=`${name.replace(/\s+/g,'_')}_gensyn_badge.png`; a.click(); }
 
