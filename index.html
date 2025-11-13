@@ -3,45 +3,47 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Gensyn — Compute Quest (Demo)</title>
+  <title>Gensyn — Compute Quest (Final)</title>
   <style>
-    :root{--bg1:#0b1020;--bg2:#08122b;--card:#071827;--accent1:#7c3aed;--accent2:#06b6d4;--muted:#9fb4c8;--glass:rgba(255,255,255,0.03)}
+    :root{--bg:#071834;--card:#ffffff10;--accent1:#7c3aed;--accent2:#06b6d4;--muted:#33506b;--glass:rgba(255,255,255,0.04)}
     *{box-sizing:border-box;font-family:Inter, system-ui, Arial, sans-serif}
-    body{margin:0;background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%);color:#eaf6ff;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
-    .wrap{width:980px;max-width:100%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;box-shadow:0 12px 50px rgba(2,6,23,0.7)}
+    body{margin:0;background:linear-gradient(180deg,#f0f8ff 0%,#dff4ff 100%);color:#04243a;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
+    .wrap{width:980px;max-width:100%;background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.88));border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(2,6,23,0.08)}
     header{display:flex;align-items:center;gap:12px}
-    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#041726;font-size:20px}
-    h1{margin:0;font-size:22px}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#02141a;font-size:20px}
+    h1{margin:0;font-size:22px;color:#04243a}
     p.lead{margin:6px 0 14px;color:var(--muted)}
     .row{display:flex;gap:14px}
     .left{flex:1;min-width:260px}
     .right{width:340px}
-    .card{background:var(--card);padding:14px;border-radius:12px}
+    .card{background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(4,36,58,0.04)}
     .nodes{display:flex;gap:8px;margin-top:8px}
-    .node{flex:1;padding:12px;border-radius:10px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,0.03);transition:transform .12s ease,box-shadow .12s ease}
+    .node{flex:1;padding:12px;border-radius:10px;text-align:center;cursor:pointer;border:1px solid rgba(4,36,58,0.06);transition:transform .12s ease,box-shadow .12s ease;background:#ffffff10}
     .node:hover{transform:translateY(-4px)}
-    .node.selected{box-shadow:0 12px 30px rgba(124,58,237,0.12);outline:2px solid rgba(6,182,212,0.12)}
+    .node.selected{box-shadow:0 12px 30px rgba(124,58,237,0.08);outline:2px solid rgba(6,182,212,0.06);background:linear-gradient(90deg, rgba(124,58,237,0.06), rgba(6,182,212,0.04))}
     .task{margin-top:14px}
-    .task-title{font-weight:700}
+    .task-title{font-weight:700;color:#04243a}
     .options{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-    .opt{padding:10px 12px;border-radius:10px;background:var(--glass);cursor:pointer;border:1px solid rgba(255,255,255,0.04);transition:background .12s ease,transform .08s ease}
+    .opt{padding:12px 14px;border-radius:10px;background:#ffffff;cursor:pointer;border:1px solid rgba(4,36,58,0.06);transition:background .12s ease,transform .08s ease;color:#04243a}
     .opt:hover{transform:translateX(6px)}
-    .opt.selected{background:linear-gradient(90deg, rgba(124,58,237,0.12), rgba(6,182,212,0.08));border-color:rgba(124,58,237,0.28)}
-    .opt.correct{background:linear-gradient(90deg, rgba(34,197,94,0.12), rgba(16,185,129,0.08));border-color:rgba(34,197,94,0.28)}
-    .opt.wrong{background:linear-gradient(90deg, rgba(239,68,68,0.08), rgba(249,115,22,0.04));border-color:rgba(239,68,68,0.28)}
+    .opt.selected{outline:2px dashed rgba(4,36,58,0.08)}
+    .opt.correct{background:#e6fff0;border-color:#86efac;color:#064e3b}
+    .opt.wrong{background:#fff0f0;border-color:#fca5a5;color:#7f1d1d}
     .controls{display:flex;gap:8px;margin-top:12px}
     button{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:0;padding:10px 14px;border-radius:10px;color:#02141a;cursor:pointer;font-weight:700}
-    .muted-btn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px 12px}
+    .muted-btn{background:transparent;border:1px solid rgba(4,36,58,0.06);color:var(--muted);padding:8px 12px}
     .stats{display:flex;flex-direction:column;gap:8px}
     .big{font-size:20px;font-weight:800}
     footer{margin-top:12px;color:var(--muted);font-size:13px}
     .leader{margin-top:12px}
-    .leader li{padding:8px 10px;border-radius:8px;margin-bottom:8px;background:rgba(255,255,255,0.015);display:flex;justify-content:space-between}
-    .welcome-overlay{position:fixed;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.75), rgba(2,6,23,0.9));display:flex;align-items:center;justify-content:center}
-    .welcome-card{width:760px;max-width:92%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:14px;box-shadow:0 20px 60px rgba(2,6,23,0.8)}
-    .row-cols{display:flex;gap:12px}
-    .qsmall{font-size:13px;color:var(--muted)}
-    .xhandle{color:var(--accent2);font-weight:700}
+    .leader li{padding:8px 10px;border-radius:8px;margin-bottom:8px;background:#ffffff;display:flex;justify-content:space-between;border:1px solid rgba(4,36,58,0.04)}
+    /* Welcome overlay in light sky-blue */
+    .welcome-overlay{position:fixed;inset:0;background:linear-gradient(180deg,#e8f7ff 0%,#d6f0ff 100%);display:flex;align-items:center;justify-content:center}
+    .welcome-card{width:760px;max-width:92%;background:#ffffff;padding:20px;border-radius:14px;box-shadow:0 20px 60px rgba(4,36,58,0.06);color:#04243a}
+    .qsmall{font-size:13px;color:#0b3b52}
+    .xhandle{color:#056a86;font-weight:700;text-decoration:none}
+    .topbar{display:flex;justify-content:space-between;align-items:center}
+    .player-name-display{font-weight:700;color:#04243a}
     @media(max-width:900px){.row{flex-direction:column}.right{width:100%}}
   </style>
 </head>
@@ -49,9 +51,13 @@
   <div class="wrap">
     <header>
       <div class="logo">GQ</div>
-      <div>
-        <h1>Gensyn — Compute Quest (Demo)</h1>
+      <div style="flex:1">
+        <h1>Gensyn — Compute Quest (Final)</h1>
         <p class="lead">Interactive mini-quiz that teaches Gensyn concepts. Single-file demo — save as <code>index.html</code> and open in a browser.</p>
+      </div>
+      <div class="topbar" style="gap:12px;align-items:center">
+        <div class="player-name-display" id="playerDisplay">Player: —</div>
+        <div><a id="xlink" class="xhandle" href="https://x.com/AmitKum955" target="_blank">@AmitKum955</a></div>
       </div>
     </header>
 
@@ -65,14 +71,14 @@
 
           <div class="task" id="taskArea">
             <div class="task-title">Task</div>
-            <div id="taskContent" style="margin-top:8px;color:var(--muted)">Press <strong>Start Task</strong> to receive a Gensyn-related question.</div>
+            <div id="taskContent" style="margin-top:8px;color:#0b3b52">Press <strong>Start Task</strong> to receive a Gensyn-related question.</div>
 
             <div class="options" id="options"></div>
 
             <div class="controls">
               <button id="startBtn">Start Task</button>
               <button class="muted-btn" id="skipBtn">Skip (cost 5 credits)</button>
-              <div style="margin-left:auto;color:var(--muted);align-self:center">Timer: <span id="timer">--</span></div>
+              <div style="margin-left:auto;color:#0b3b52;align-self:center">Timer: <span id="timer">--</span></div>
             </div>
           </div>
         </div>
@@ -80,7 +86,7 @@
         <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
           <div class="card" style="flex:1;min-width:220px">
             <strong>Quick Tips</strong>
-            <ul style="margin:8px 0 0;color:var(--muted);padding-left:18px">
+            <ul style="margin:8px 0 0;color:#0b3b52;padding-left:18px">
               <li>Read question carefully — click one or more options as required.</li>
               <li>Correct answers give score and badges; wrong answers reduce credits.</li>
               <li>Save your score to the leaderboard to show community contribution.</li>
@@ -111,38 +117,44 @@
 
         <div class="card" style="margin-top:12px">
           <strong>Demo Notes</strong>
-          <p style="color:var(--muted);margin:8px 0 0;font-size:13px">Client-only demo: leaderboard uses browser localStorage. For production, integrate backend API. Questions sourced from Gensyn docs.</p>
+          <p style="color:#0b3b52;margin:8px 0 0;font-size:13px">Client-only demo: leaderboard uses browser localStorage. For production, integrate backend API. Questions sourced from Gensyn docs.</p>
         </div>
 
       </aside>
     </div>
 
-    <footer>Made for Gensyn-style contribution demo • <span class="xhandle">@AmitKum955</span></footer>
+    <footer>Made for Gensyn-style contribution demo • <a class="xhandle" href="https://x.com/AmitKum955" target="_blank">@AmitKum955</a></footer>
   </div>
 
-  <!-- Welcome overlay -->
+  <!-- Welcome overlay (light sky-blue) -->
   <div class="welcome-overlay" id="welcome">
     <div class="welcome-card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
         <div style="flex:1">
-          <h2 style="margin:0 0 6px">Welcome to Compute Quest</h2>
+          <h2 style="margin:0 0 6px;color:#04243a">Welcome to Compute Quest</h2>
           <p class="qsmall">This mini-quiz teaches core ideas behind the Gensyn protocol (decentralised ML compute). Answer questions to earn score and badges — these show you're a community contributor.</p>
           <div style="margin-top:12px">
             <strong>How to play</strong>
-            <ol style="margin:8px 0 0 18px;color:var(--muted)">
+            <ol style="margin:8px 0 0 18px;color:#0b3b52">
+              <li>Enter your name below (this will be recorded for the session).</li>
               <li>Choose a compute node (affects rewards).</li>
               <li>Click <strong>Start Task</strong> to get a question based on Gensyn docs.</li>
-              <li>Select the correct option(s) and wait for evaluation.</li>
-              <li>Save your score to the leaderboard and share with the community.</li>
+              <li>Select the correct option(s) and wait for evaluation; next question will appear automatically.</li>
             </ol>
           </div>
         </div>
-        <div style="width:220px">
+        <div style="width:240px">
           <strong>Why this helps</strong>
           <p class="qsmall" style="margin-top:8px">Building and sharing demos like this increases community engagement. Tag the project on social channels when sharing demo results.</p>
-          <div style="margin-top:8px;font-size:13px;color:var(--muted)"><strong>Share tag:</strong> <span class="xhandle">@AmitKum955</span></div>
+          <div style="margin-top:8px;font-size:13px;color:#0b3b52"><strong>Share tag:</strong> <a class="xhandle" href="https://x.com/AmitKum955" target="_blank">@AmitKum955</a></div>
         </div>
       </div>
+
+      <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+        <label style="min-width:90px;color:#04243a">Your name:</label>
+        <input id="playerName" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(4,36,58,0.06)" placeholder="Enter your name" />
+      </div>
+
       <div style="display:flex;justify-content:flex-end;margin-top:14px;gap:8px">
         <button id="startPlay">Start Playing</button>
         <button class="muted-btn" id="closeWelcome">Close</button>
@@ -151,14 +163,13 @@
   </div>
 
   <script>
-    // Questions sourced and adapted from Gensyn docs: https://docs.gensyn.ai/ (used to create quiz)
+    // Questions adapted from Gensyn docs: https://docs.gensyn.ai/
     const nodesData = [
       {id:'node-a',name:'Edge Node',reliability:0.90,desc:'Low-power, cost-efficient'},
       {id:'node-b',name:'Cloud Node',reliability:0.98,desc:'Reliable, balanced'},
       {id:'node-c',name:'GPU Rig',reliability:0.85,desc:'Powerful, high throughput'},
     ];
 
-    // Gensyn-related MCQs (single or multi-answer). Answers use index positions (0-based)
     const tasksPool = [
       {q:'Gensyn is primarily designed to:',opts:['Centralize ML models','Unify global compute for ML','Create private data silos','Act as a social network'],ans:[1]},
       {q:'Which of the following are core features of Gensyn? (select all that apply)',opts:['Trustless verification','Permissioned access only','Peer-to-peer communication','Decentralized coordination'],ans:[0,2,3]},
@@ -168,9 +179,11 @@
       {q:'Which outcomes does Gensyn aim to improve? (select two)',opts:['Scaling ML beyond centralized limits','Restricting access to compute','Standardizing ML execution','Increasing vendor lock-in'],ans:[0,2]},
     ];
 
+    let playerName = '';
     let selectedNode = null;
     let credits = 20; let score = 0; let badges = 0;
     let timerInterval = null; let timeLeft = 0; let currentTask = null; let optionsDisabled=false;
+    let askedCount = 0; const MAX_QUESTIONS = tasksPool.length; // quiz length
 
     const nodesEl = document.getElementById('nodes');
     const optionsEl = document.getElementById('options');
@@ -181,32 +194,51 @@
     const badgesEl = document.getElementById('badges');
     const leadersEl = document.getElementById('leaders');
     const welcomeEl = document.getElementById('welcome');
+    const playerDisplay = document.getElementById('playerDisplay');
 
     function renderNodes(){
       nodesEl.innerHTML='';
       nodesData.forEach(n=>{
         const d=document.createElement('div');
         d.className='node'+(selectedNode===n.id?' selected':'');
-        d.innerHTML=`<div style="font-weight:800">${n.name}</div><div style="font-size:12px;color:var(--muted)">${n.desc}</div>`;
-        d.onclick=()=>{selectedNode=n.id;renderNodes()};
+        d.innerHTML=`<div style="font-weight:800">${n.name}</div><div style="font-size:12px;color:#0b3b52">${n.desc}</div>`;
+        d.onclick=()=>{if(askedCount===0){selectedNode=n.id;renderNodes()} else alert('You can change node only before starting the quiz.')};
         nodesEl.appendChild(d);
       })
     }
 
-    function pickTask(){
-      const idx = Math.floor(Math.random()*tasksPool.length);
+    function shuffle(arr){
+      for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}
+    }
+
+    // Create a shuffled question order for this session
+    let sessionOrder = [];
+    function prepareSession(){
+      sessionOrder = tasksPool.map((_,i)=>i);
+      shuffle(sessionOrder);
+      askedCount = 0;
+    }
+
+    function getNextTask(){
+      if(askedCount>=MAX_QUESTIONS) return null;
+      const idx = sessionOrder[askedCount];
+      askedCount++;
       return JSON.parse(JSON.stringify(tasksPool[idx]));
     }
 
     function startTask(){
+      if(!playerName){alert('Please enter your name in the welcome screen before starting.');return}
       if(!selectedNode){alert('Choose a node first.');return}
-      if(credits<=0){alert('No credits left. Save score or refresh to reset.');return}
-      currentTask = pickTask();
+      if(credits<=0){alert('No credits left. Save score or restart.');return}
+      if(askedCount===0) prepareSession();
+      currentTask = getNextTask();
+      if(!currentTask){ endQuiz(); return }
       optionsDisabled=false;
       timeLeft = 30; // seconds per question
       taskContent.textContent = currentTask.q;
       renderOptions(currentTask.opts);
       startTimer();
+      updatePlayerDisplay();
     }
 
     function renderOptions(opts){
@@ -215,15 +247,21 @@
         const b=document.createElement('div');
         b.className='opt';
         b.textContent = o;
-        b.onclick=()=>selectOption(i,b);
+        b.onclick=()=>handleAnswerClick(i,b);
         optionsEl.appendChild(b);
       })
     }
 
-    function selectOption(i,el){
+    function handleAnswerClick(i,el){
       if(optionsDisabled) return;
-      // allow multiple selection; toggle visual state
-      el.classList.toggle('selected');
+      // lock immediately on first click for this question
+      optionsDisabled = true;
+      clearInterval(timerInterval);
+      // mark user's selection(s)
+      el.classList.add('selected');
+      // collect all selected (we allow multi-select before locking normally, but user clicked so we evaluate single-click)
+      // For better UX, allow toggling multiple until they press a 'Submit' — but user requested lock on click, so evaluate now.
+      evaluateTask([i]);
     }
 
     function startTimer(){
@@ -234,22 +272,20 @@
         timerEl.textContent = timeLeft + 's';
         if(timeLeft<=0){
           clearInterval(timerInterval);
-          evaluateTask();
+          optionsDisabled = true;
+          evaluateTask([]); // no selection -> timeout
         }
       },1000)
     }
 
-    function evaluateTask(){
-      optionsDisabled=true;
-      clearInterval(timerInterval);
-      const chosenEls = Array.from(optionsEl.querySelectorAll('.opt.selected'));
-      const chosenIdx = chosenEls.map(e=>Array.from(optionsEl.children).indexOf(e)).sort();
+    function evaluateTask(userChosenIdx){
+      // userChosenIdx: array of indices chosen
+      const chosenIdx = (userChosenIdx||[]).slice().sort();
       const correctIdx = (currentTask.ans||[]).slice().sort();
       // mark options visually correct/wrong
       Array.from(optionsEl.children).forEach((child,idx)=>{
-        child.classList.remove('correct','wrong');
-        if(correctIdx.includes(idx) ) child.classList.add('correct');
-        // if user selected but it's not in correct => wrong
+        child.classList.remove('correct','wrong','selected');
+        if(correctIdx.includes(idx)) child.classList.add('correct');
         if(chosenIdx.includes(idx) && !correctIdx.includes(idx)) child.classList.add('wrong');
       })
 
@@ -261,12 +297,20 @@
         score += gained;
         badges += 1;
         credits += 2;
-        showMessage('Correct! +' + gained + ' points', true);
+        showMessage(`Correct! +${gained} points`, true);
       } else {
         credits -= 3;
-        showMessage('Incorrect. -3 credits', false);
+        // if timeout and no selection, show message differently
+        if(chosenIdx.length===0) showMessage('Time out! -3 credits', false);
+        else showMessage('Incorrect. -3 credits', false);
       }
       updateUI();
+      // auto next question after 1.8 seconds
+      setTimeout(()=>{
+        // if reached MAX_QUESTIONS then end quiz, else next
+        if(askedCount>=MAX_QUESTIONS || credits<=0){ endQuiz(); }
+        else { startTask(); }
+      },1800);
     }
 
     function arraysEqual(a,b){
@@ -277,9 +321,9 @@
 
     function showMessage(text,ok){
       const prev = document.getElementById('msg'); if(prev) prev.remove();
-      const m = document.createElement('div'); m.id='msg'; m.textContent=text; m.style.marginTop='8px'; m.style.color= ok? '#b7f5d0':'#f8c6c6';
+      const m = document.createElement('div'); m.id='msg'; m.textContent=text; m.style.marginTop='8px'; m.style.color= ok? '#064e3b':'#7f1d1d';
       taskContent.parentNode.insertBefore(m, optionsEl.nextSibling);
-      setTimeout(()=>{ if(m) m.remove(); },3000);
+      setTimeout(()=>{ if(m) m.remove(); },1600);
     }
 
     function updateUI(){
@@ -287,6 +331,7 @@
       scoreEl.textContent = score;
       badgesEl.textContent = badges;
       renderLeaders();
+      updatePlayerDisplay();
     }
 
     function skipTask(){
@@ -295,21 +340,51 @@
       clearInterval(timerInterval); timerEl.textContent='--'; optionsEl.innerHTML=''; taskContent.textContent='Task skipped. Press Start Task.'; optionsDisabled=true;
     }
 
-    function saveScore(){
-      const name = prompt('Enter name to save on leaderboard (short):','Player');
+    function endQuiz(){
+      clearInterval(timerInterval);
+      optionsEl.innerHTML='';
+      taskContent.textContent = `🎉 Congratulations ${playerName || 'Player'}! You completed the Compute Quest.`;
+      // show final stats and restart button
+      const r = document.createElement('div'); r.style.marginTop='12px';
+      r.innerHTML = `<div style="margin-top:6px;color:#0b3b52">Final Score: <strong>${score}</strong> — Badges: <strong>${badges}</strong></div>`;
+      const btn = document.createElement('button'); btn.textContent='Restart Quiz'; btn.style.marginTop='10px';
+      btn.onclick = ()=>{ restartQuiz(); };
+      r.appendChild(btn);
+      taskContent.parentNode.appendChild(r);
+      // offer save to leaderboard automatically
+      // optionally auto-save name+score to localStorage
+      // (we won't auto-save without consent; show prompt)
+      setTimeout(()=>{
+        if(confirm('Save your score to leaderboard?')){ saveScore(true); }
+      },400);
+    }
+
+    function restartQuiz(){
+      // reset values but keep player name and node selection
+      credits = 20; score = 0; badges = 0; askedCount = 0;
+      prepareSession();
+      // remove any residual message or result block
+      const prev = document.getElementById('msg'); if(prev) prev.remove();
+      Array.from(optionsEl.children).forEach(c=>c.remove());
+      taskContent.textContent = 'Press Start Task to receive a Gensyn-related question.';
+      updateUI();
+    }
+
+    function saveScore(auto=false){
+      let name = playerName || prompt('Enter name to save on leaderboard (short):','Player');
       if(!name) return;
       const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]');
       table.push({name:name.slice(0,12),score,when:new Date().toISOString()});
       table.sort((a,b)=>b.score-a.score);
       localStorage.setItem('gensyn_leaders', JSON.stringify(table.slice(0,30)));
       renderLeaders();
-      alert('Saved!');
+      if(!auto) alert('Saved!');
     }
 
     function renderLeaders(){
       const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]');
       leadersEl.innerHTML='';
-      if(table.length===0){ leadersEl.innerHTML='<li style="list-style:none;color:var(--muted)">No scores yet</li>'; return}
+      if(table.length===0){ leadersEl.innerHTML='<li style="list-style:none;color:#0b3b52">No scores yet</li>'; return}
       table.slice(0,10).forEach(r=>{
         const li=document.createElement('li'); li.innerHTML = `<span>${r.name}</span><strong>${r.score}</strong>`; leadersEl.appendChild(li);
       })
@@ -322,13 +397,28 @@
       window.open(tw,'_blank');
     }
 
-    // wire buttons
+    // welcome controls
+    document.getElementById('startPlay').onclick = ()=>{
+      const input = document.getElementById('playerName');
+      const val = (input.value||'').trim();
+      if(!val){ alert('Please enter your name to start.'); input.focus(); return; }
+      playerName = val.slice(0,24);
+      welcomeEl.style.display='none';
+      updatePlayerDisplay();
+      // auto-prepare session
+      prepareSession();
+    };
+    document.getElementById('closeWelcome').onclick = ()=>{ welcomeEl.style.display='none'; };
+
+    // wire other buttons
     document.getElementById('startBtn').onclick = ()=>{ startTask(); };
     document.getElementById('skipBtn').onclick = ()=>{ skipTask(); };
-    document.getElementById('saveScore').onclick = ()=>{ saveScore(); };
+    document.getElementById('saveScore').onclick = ()=>{ saveScore(false); };
     document.getElementById('shareBtn').onclick = ()=>{ shareScore(); };
-    document.getElementById('startPlay').onclick = ()=>{ welcomeEl.style.display='none'; };
-    document.getElementById('closeWelcome').onclick = ()=>{ welcomeEl.style.display='none'; };
+
+    function updatePlayerDisplay(){
+      playerDisplay.textContent = 'Player: ' + (playerName || '—');
+    }
 
     // init
     renderNodes(); updateUI(); renderLeaders();
