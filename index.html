@@ -1,427 +1,266 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Gensyn — Compute Quest (Final)</title>
-  <style>
-    :root{--bg:#071834;--card:#ffffff10;--accent1:#7c3aed;--accent2:#06b6d4;--muted:#33506b;--glass:rgba(255,255,255,0.04)}
-    *{box-sizing:border-box;font-family:Inter, system-ui, Arial, sans-serif}
-    body{margin:0;background:linear-gradient(180deg,#f0f8ff 0%,#dff4ff 100%);color:#04243a;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
-    .wrap{width:980px;max-width:100%;background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.88));border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(2,6,23,0.08)}
-    header{display:flex;align-items:center;gap:12px}
-    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#02141a;font-size:20px}
-    h1{margin:0;font-size:22px;color:#04243a}
-    p.lead{margin:6px 0 14px;color:var(--muted)}
-    .row{display:flex;gap:14px}
-    .left{flex:1;min-width:260px}
-    .right{width:340px}
-    .card{background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(4,36,58,0.04)}
-    .nodes{display:flex;gap:8px;margin-top:8px}
-    .node{flex:1;padding:12px;border-radius:10px;text-align:center;cursor:pointer;border:1px solid rgba(4,36,58,0.06);transition:transform .12s ease,box-shadow .12s ease;background:#ffffff10}
-    .node:hover{transform:translateY(-4px)}
-    .node.selected{box-shadow:0 12px 30px rgba(124,58,237,0.08);outline:2px solid rgba(6,182,212,0.06);background:linear-gradient(90deg, rgba(124,58,237,0.06), rgba(6,182,212,0.04))}
-    .task{margin-top:14px}
-    .task-title{font-weight:700;color:#04243a}
-    .options{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-    .opt{padding:12px 14px;border-radius:10px;background:#ffffff;cursor:pointer;border:1px solid rgba(4,36,58,0.06);transition:background .12s ease,transform .08s ease;color:#04243a}
-    .opt:hover{transform:translateX(6px)}
-    .opt.selected{outline:2px dashed rgba(4,36,58,0.08)}
-    .opt.correct{background:#e6fff0;border-color:#86efac;color:#064e3b}
-    .opt.wrong{background:#fff0f0;border-color:#fca5a5;color:#7f1d1d}
-    .controls{display:flex;gap:8px;margin-top:12px}
-    button{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:0;padding:10px 14px;border-radius:10px;color:#02141a;cursor:pointer;font-weight:700}
-    .muted-btn{background:transparent;border:1px solid rgba(4,36,58,0.06);color:var(--muted);padding:8px 12px}
-    .stats{display:flex;flex-direction:column;gap:8px}
-    .big{font-size:20px;font-weight:800}
-    footer{margin-top:12px;color:var(--muted);font-size:13px}
-    .leader{margin-top:12px}
-    .leader li{padding:8px 10px;border-radius:8px;margin-bottom:8px;background:#ffffff;display:flex;justify-content:space-between;border:1px solid rgba(4,36,58,0.04)}
-    /* Welcome overlay in light sky-blue */
-    .welcome-overlay{position:fixed;inset:0;background:linear-gradient(180deg,#e8f7ff 0%,#d6f0ff 100%);display:flex;align-items:center;justify-content:center}
-    .welcome-card{width:760px;max-width:92%;background:#ffffff;padding:20px;border-radius:14px;box-shadow:0 20px 60px rgba(4,36,58,0.06);color:#04243a}
-    .qsmall{font-size:13px;color:#0b3b52}
-    .xhandle{color:#056a86;font-weight:700;text-decoration:none}
-    .topbar{display:flex;justify-content:space-between;align-items:center}
-    .player-name-display{font-weight:700;color:#04243a}
-    @media(max-width:900px){.row{flex-direction:column}.right{width:100%}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gensyn Compute Quest</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(120deg, #FFD54F, #FF8A65);
+    color: #00264d;
+    text-align: center;
+  }
+  header {
+    background: rgba(0,0,0,0.1);
+    padding: 10px;
+    font-weight: bold;
+  }
+  header a {
+    color: #001F3F;
+    text-decoration: none;
+  }
+  .welcome, .quiz, .result, .badge {
+    display: none;
+    padding: 20px;
+  }
+  .welcome.active, .quiz.active, .result.active, .badge.active {
+    display: block;
+  }
+  h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+  input {
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #00264d;
+    border-radius: 8px;
+  }
+  button {
+    background: #ffcc00;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  button:hover {
+    background: #ffc107;
+  }
+  .option {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 80%;
+    border: 2px solid #00264d;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .option.locked {
+    pointer-events: none;
+  }
+  .option.correct { background-color: #4CAF50; color: white; }
+  .option.wrong { background-color: #F44336; color: white; }
+  .badge-circle {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, gold, orange);
+    display: flex; justify-content: center; align-items: center;
+    margin: 20px auto;
+    font-weight: bold;
+    color: #00264d;
+    box-shadow: 0 0 15px gold;
+  }
+  footer {
+    margin-top: 20px;
+    font-size: 0.9em;
+  }
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="logo">GQ</div>
-      <div style="flex:1">
-        <h1>Gensyn — Compute Quest (Final)</h1>
-        <p class="lead">Interactive mini-quiz that teaches Gensyn concepts. Single-file demo — save as <code>index.html</code> and open in a browser.</p>
-      </div>
-      <div class="topbar" style="gap:12px;align-items:center">
-        <div class="player-name-display" id="playerDisplay">Player: —</div>
-        <div><a id="xlink" class="xhandle" href="https://x.com/AmitKum955" target="_blank">@AmitKum955</a></div>
-      </div>
-    </header>
 
-    <div class="row" style="margin-top:14px">
-      <div class="left">
-        <div class="card">
-          <div>
-            <strong>Choose your compute node:</strong>
-            <div class="nodes" id="nodes"></div>
-          </div>
+<header>
+  Created by <a href="https://x.com/AmitKum955" target="_blank">@AmitKum955</a> | 
+  Project X: <a href="https://x.com/GensynAI" target="_blank">Gensyn</a>
+</header>
 
-          <div class="task" id="taskArea">
-            <div class="task-title">Task</div>
-            <div id="taskContent" style="margin-top:8px;color:#0b3b52">Press <strong>Start Task</strong> to receive a Gensyn-related question.</div>
+<div class="welcome active">
+  <h1>Welcome to Gensyn Compute Quest</h1>
+  <p>An AI-powered quiz to test your knowledge of decentralized compute.<br>
+  Enter your name below and start your first task!</p>
+  <input type="text" id="playerName" placeholder="Enter your name">
+  <br>
+  <button onclick="startGame()">Start Task</button>
+</div>
 
-            <div class="options" id="options"></div>
+<div class="quiz">
+  <h2 id="question"></h2>
+  <div id="options"></div>
+  <p id="timer"></p>
+</div>
 
-            <div class="controls">
-              <button id="startBtn">Start Task</button>
-              <button class="muted-btn" id="skipBtn">Skip (cost 5 credits)</button>
-              <div style="margin-left:auto;color:#0b3b52;align-self:center">Timer: <span id="timer">--</span></div>
-            </div>
-          </div>
-        </div>
+<div class="result">
+  <h2 id="resultMessage"></h2>
+  <button onclick="restartGame()">Restart Quest</button>
+</div>
 
-        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-          <div class="card" style="flex:1;min-width:220px">
-            <strong>Quick Tips</strong>
-            <ul style="margin:8px 0 0;color:#0b3b52;padding-left:18px">
-              <li>Read question carefully — click one or more options as required.</li>
-              <li>Correct answers give score and badges; wrong answers reduce credits.</li>
-              <li>Save your score to the leaderboard to show community contribution.</li>
-            </ul>
-          </div>
-
-          <div class="card" style="width:220px">
-            <strong>Progress</strong>
-            <div style="margin-top:8px" class="stats">
-              <div>Credits: <span id="credits">20</span></div>
-              <div>Score: <span class="big" id="score">0</span></div>
-              <div>Badges: <span id="badges">0</span></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <aside class="right">
-        <div class="card">
-          <strong>Leaderboard</strong>
-          <ol id="leaders" class="leader"></ol>
-          <div style="display:flex;gap:8px;margin-top:10px">
-            <button id="saveScore">Save Score</button>
-            <button class="muted-btn" id="shareBtn">Share</button>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:12px">
-          <strong>Demo Notes</strong>
-          <p style="color:#0b3b52;margin:8px 0 0;font-size:13px">Client-only demo: leaderboard uses browser localStorage. For production, integrate backend API. Questions sourced from Gensyn docs.</p>
-        </div>
-
-      </aside>
-    </div>
-
-    <footer>Made for Gensyn-style contribution demo • <a class="xhandle" href="https://x.com/AmitKum955" target="_blank">@AmitKum955</a></footer>
+<div class="badge">
+  <div class="badge-circle">
+    <div id="badgeText"></div>
   </div>
+  <p>🏆 Congratulations <span id="badgeName"></span>!<br>
+  You are now a Gensyn Certified Compute Explorer!</p>
+  <footer>
+    Verified by <a href="https://x.com/GensynAI" target="_blank">@GensynAI</a> |
+    Created by <a href="https://x.com/AmitKum955" target="_blank">@AmitKum955</a>
+  </footer>
+  <button onclick="restartGame()">Restart Quest</button>
+</div>
 
-  <!-- Welcome overlay (light sky-blue) -->
-  <div class="welcome-overlay" id="welcome">
-    <div class="welcome-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-        <div style="flex:1">
-          <h2 style="margin:0 0 6px;color:#04243a">Welcome to Compute Quest</h2>
-          <p class="qsmall">This mini-quiz teaches core ideas behind the Gensyn protocol (decentralised ML compute). Answer questions to earn score and badges — these show you're a community contributor.</p>
-          <div style="margin-top:12px">
-            <strong>How to play</strong>
-            <ol style="margin:8px 0 0 18px;color:#0b3b52">
-              <li>Enter your name below (this will be recorded for the session).</li>
-              <li>Choose a compute node (affects rewards).</li>
-              <li>Click <strong>Start Task</strong> to get a question based on Gensyn docs.</li>
-              <li>Select the correct option(s) and wait for evaluation; next question will appear automatically.</li>
-            </ol>
-          </div>
-        </div>
-        <div style="width:240px">
-          <strong>Why this helps</strong>
-          <p class="qsmall" style="margin-top:8px">Building and sharing demos like this increases community engagement. Tag the project on social channels when sharing demo results.</p>
-          <div style="margin-top:8px;font-size:13px;color:#0b3b52"><strong>Share tag:</strong> <a class="xhandle" href="https://x.com/AmitKum955" target="_blank">@AmitKum955</a></div>
-        </div>
-      </div>
+<script>
+const questions = [
+  {
+    q: "What is Gensyn primarily focused on?",
+    options: ["Decentralized compute for AI", "NFT trading", "Blockchain gaming", "Social media"],
+    answer: 0
+  },
+  {
+    q: "Which technology helps Gensyn verify work done by others?",
+    options: ["Proof of Compute", "Proof of Stake", "Proof of Work", "Proof of Trust"],
+    answer: 0
+  },
+  {
+    q: "What can developers train on Gensyn?",
+    options: ["AI models", "Smart contracts", "NFTs", "Websites"],
+    answer: 0
+  },
+  {
+    q: "What layer does Gensyn operate on?",
+    options: ["Compute layer", "Network layer", "Application layer", "Transport layer"],
+    answer: 0
+  },
+  {
+    q: "Gensyn connects machine learning with what?",
+    options: ["Decentralized infrastructure", "Social media", "VR systems", "Databases"],
+    answer: 0
+  },
+  {
+    q: "Which token might represent Gensyn’s network use?",
+    options: ["Compute Token", "GNSYN", "AI Coin", "WorkNet"],
+    answer: 1
+  },
+  {
+    q: "Gensyn ensures tasks are completed honestly using?",
+    options: ["Verification proofs", "Random guessing", "AI bias", "User votes"],
+    answer: 0
+  },
+  {
+    q: "Who benefits most from Gensyn?",
+    options: ["AI researchers", "Gamers", "Vloggers", "Artists"],
+    answer: 0
+  },
+  {
+    q: "What’s the purpose of decentralization in Gensyn?",
+    options: ["Reduce compute cost", "Make graphics better", "Play games faster", "Hide data"],
+    answer: 0
+  },
+  {
+    q: "Where can you learn more about Gensyn?",
+    options: ["docs.gensyn.ai", "gensyn.games", "gensynshop.com", "ai-social.com"],
+    answer: 0
+  }
+];
 
-      <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
-        <label style="min-width:90px;color:#04243a">Your name:</label>
-        <input id="playerName" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(4,36,58,0.06)" placeholder="Enter your name" />
-      </div>
+let current = 0, score = 0, timer, player = "";
 
-      <div style="display:flex;justify-content:flex-end;margin-top:14px;gap:8px">
-        <button id="startPlay">Start Playing</button>
-        <button class="muted-btn" id="closeWelcome">Close</button>
-      </div>
-    </div>
-  </div>
+function startGame() {
+  player = document.getElementById("playerName").value.trim();
+  if (!player) return alert("Please enter your name!");
+  document.querySelector(".welcome").classList.remove("active");
+  document.querySelector(".quiz").classList.add("active");
+  showQuestion();
+}
 
-  <script>
-    // Questions adapted from Gensyn docs: https://docs.gensyn.ai/
-    const nodesData = [
-      {id:'node-a',name:'Edge Node',reliability:0.90,desc:'Low-power, cost-efficient'},
-      {id:'node-b',name:'Cloud Node',reliability:0.98,desc:'Reliable, balanced'},
-      {id:'node-c',name:'GPU Rig',reliability:0.85,desc:'Powerful, high throughput'},
-    ];
+function showQuestion() {
+  if (current >= questions.length) return showResult();
+  const q = questions[current];
+  document.getElementById("question").innerText = q.q;
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.classList.add("option");
+    btn.innerText = opt;
+    btn.onclick = () => checkAnswer(btn, i);
+    optionsDiv.appendChild(btn);
+  });
+  startTimer();
+}
 
-    const tasksPool = [
-      {q:'Gensyn is primarily designed to:',opts:['Centralize ML models','Unify global compute for ML','Create private data silos','Act as a social network'],ans:[1]},
-      {q:'Which of the following are core features of Gensyn? (select all that apply)',opts:['Trustless verification','Permissioned access only','Peer-to-peer communication','Decentralized coordination'],ans:[0,2,3]},
-      {q:'Gensyn is built on top of which blockchain concept?',opts:['Bitcoin UTXO','Ethereum rollup','Centralized server','Proof-of-capacity chain'],ans:[1]},
-      {q:'What is Judge in Gensyn?',opts:['A training dataset','A cryptographically verifiable runtime','A UI toolkit','A cloud provider'],ans:[1]},
-      {q:'RL Swarm in Gensyn refers to:',opts:['A single centralized model','A decentralized swarm of reinforcement learning agents','A tokenomics model','A file storage protocol'],ans:[1]},
-      {q:'Which outcomes does Gensyn aim to improve? (select two)',opts:['Scaling ML beyond centralized limits','Restricting access to compute','Standardizing ML execution','Increasing vendor lock-in'],ans:[0,2]},
-    ];
-
-    let playerName = '';
-    let selectedNode = null;
-    let credits = 20; let score = 0; let badges = 0;
-    let timerInterval = null; let timeLeft = 0; let currentTask = null; let optionsDisabled=false;
-    let askedCount = 0; const MAX_QUESTIONS = tasksPool.length; // quiz length
-
-    const nodesEl = document.getElementById('nodes');
-    const optionsEl = document.getElementById('options');
-    const taskContent = document.getElementById('taskContent');
-    const timerEl = document.getElementById('timer');
-    const creditsEl = document.getElementById('credits');
-    const scoreEl = document.getElementById('score');
-    const badgesEl = document.getElementById('badges');
-    const leadersEl = document.getElementById('leaders');
-    const welcomeEl = document.getElementById('welcome');
-    const playerDisplay = document.getElementById('playerDisplay');
-
-    function renderNodes(){
-      nodesEl.innerHTML='';
-      nodesData.forEach(n=>{
-        const d=document.createElement('div');
-        d.className='node'+(selectedNode===n.id?' selected':'');
-        d.innerHTML=`<div style="font-weight:800">${n.name}</div><div style="font-size:12px;color:#0b3b52">${n.desc}</div>`;
-        d.onclick=()=>{if(askedCount===0){selectedNode=n.id;renderNodes()} else alert('You can change node only before starting the quiz.')};
-        nodesEl.appendChild(d);
-      })
+function startTimer() {
+  let timeLeft = 10;
+  const timerEl = document.getElementById("timer");
+  timerEl.innerText = `⏳ Time: ${timeLeft}s`;
+  clearInterval(timer);
+  timer = setInterval(() => {
+    timeLeft--;
+    timerEl.innerText = `⏳ Time: ${timeLeft}s`;
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      lockOptions();
+      nextQuestion();
     }
+  }, 1000);
+}
 
-    function shuffle(arr){
-      for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}
-    }
+function checkAnswer(btn, index) {
+  clearInterval(timer);
+  const q = questions[current];
+  const options = document.querySelectorAll(".option");
+  options.forEach(o => o.classList.add("locked"));
+  if (index === q.answer) {
+    btn.classList.add("correct");
+    score++;
+  } else {
+    btn.classList.add("wrong");
+    options[q.answer].classList.add("correct");
+  }
+  setTimeout(nextQuestion, 1500);
+}
 
-    // Create a shuffled question order for this session
-    let sessionOrder = [];
-    function prepareSession(){
-      sessionOrder = tasksPool.map((_,i)=>i);
-      shuffle(sessionOrder);
-      askedCount = 0;
-    }
+function lockOptions() {
+  const options = document.querySelectorAll(".option");
+  options.forEach(o => o.classList.add("locked"));
+}
 
-    function getNextTask(){
-      if(askedCount>=MAX_QUESTIONS) return null;
-      const idx = sessionOrder[askedCount];
-      askedCount++;
-      return JSON.parse(JSON.stringify(tasksPool[idx]));
-    }
+function nextQuestion() {
+  current++;
+  showQuestion();
+}
 
-    function startTask(){
-      if(!playerName){alert('Please enter your name in the welcome screen before starting.');return}
-      if(!selectedNode){alert('Choose a node first.');return}
-      if(credits<=0){alert('No credits left. Save score or restart.');return}
-      if(askedCount===0) prepareSession();
-      currentTask = getNextTask();
-      if(!currentTask){ endQuiz(); return }
-      optionsDisabled=false;
-      timeLeft = 30; // seconds per question
-      taskContent.textContent = currentTask.q;
-      renderOptions(currentTask.opts);
-      startTimer();
-      updatePlayerDisplay();
-    }
+function showResult() {
+  document.querySelector(".quiz").classList.remove("active");
+  const percent = (score / questions.length) * 100;
+  if (percent >= 75) {
+    document.querySelector(".badge").classList.add("active");
+    document.getElementById("badgeName").innerText = player;
+    document.getElementById("badgeText").innerText = "🏅 Gensyn Badge";
+  } else {
+    document.querySelector(".result").classList.add("active");
+    document.getElementById("resultMessage").innerText =
+      `You scored ${percent.toFixed(0)}%. You need more compute power, ${player}!`;
+  }
+}
 
-    function renderOptions(opts){
-      optionsEl.innerHTML='';
-      opts.forEach((o,i)=>{
-        const b=document.createElement('div');
-        b.className='opt';
-        b.textContent = o;
-        b.onclick=()=>handleAnswerClick(i,b);
-        optionsEl.appendChild(b);
-      })
-    }
-
-    function handleAnswerClick(i,el){
-      if(optionsDisabled) return;
-      // lock immediately on first click for this question
-      optionsDisabled = true;
-      clearInterval(timerInterval);
-      // mark user's selection(s)
-      el.classList.add('selected');
-      // collect all selected (we allow multi-select before locking normally, but user clicked so we evaluate single-click)
-      // For better UX, allow toggling multiple until they press a 'Submit' — but user requested lock on click, so evaluate now.
-      evaluateTask([i]);
-    }
-
-    function startTimer(){
-      clearInterval(timerInterval);
-      timerEl.textContent = timeLeft + 's';
-      timerInterval = setInterval(()=>{
-        timeLeft--;
-        timerEl.textContent = timeLeft + 's';
-        if(timeLeft<=0){
-          clearInterval(timerInterval);
-          optionsDisabled = true;
-          evaluateTask([]); // no selection -> timeout
-        }
-      },1000)
-    }
-
-    function evaluateTask(userChosenIdx){
-      // userChosenIdx: array of indices chosen
-      const chosenIdx = (userChosenIdx||[]).slice().sort();
-      const correctIdx = (currentTask.ans||[]).slice().sort();
-      // mark options visually correct/wrong
-      Array.from(optionsEl.children).forEach((child,idx)=>{
-        child.classList.remove('correct','wrong','selected');
-        if(correctIdx.includes(idx)) child.classList.add('correct');
-        if(chosenIdx.includes(idx) && !correctIdx.includes(idx)) child.classList.add('wrong');
-      })
-
-      const isCorrect = arraysEqual(chosenIdx, correctIdx);
-      if(isCorrect){
-        const node = nodesData.find(n=>n.id===selectedNode);
-        const factor = node?node.reliability:0.9;
-        const gained = Math.ceil(10 * factor);
-        score += gained;
-        badges += 1;
-        credits += 2;
-        showMessage(`Correct! +${gained} points`, true);
-      } else {
-        credits -= 3;
-        // if timeout and no selection, show message differently
-        if(chosenIdx.length===0) showMessage('Time out! -3 credits', false);
-        else showMessage('Incorrect. -3 credits', false);
-      }
-      updateUI();
-      // auto next question after 1.8 seconds
-      setTimeout(()=>{
-        // if reached MAX_QUESTIONS then end quiz, else next
-        if(askedCount>=MAX_QUESTIONS || credits<=0){ endQuiz(); }
-        else { startTask(); }
-      },1800);
-    }
-
-    function arraysEqual(a,b){
-      if(a.length!==b.length) return false;
-      for(let i=0;i<a.length;i++) if(a[i]!==b[i]) return false;
-      return true;
-    }
-
-    function showMessage(text,ok){
-      const prev = document.getElementById('msg'); if(prev) prev.remove();
-      const m = document.createElement('div'); m.id='msg'; m.textContent=text; m.style.marginTop='8px'; m.style.color= ok? '#064e3b':'#7f1d1d';
-      taskContent.parentNode.insertBefore(m, optionsEl.nextSibling);
-      setTimeout(()=>{ if(m) m.remove(); },1600);
-    }
-
-    function updateUI(){
-      creditsEl.textContent = credits;
-      scoreEl.textContent = score;
-      badgesEl.textContent = badges;
-      renderLeaders();
-      updatePlayerDisplay();
-    }
-
-    function skipTask(){
-      if(credits<5){alert('Not enough credits to skip');return}
-      credits -=5; updateUI();
-      clearInterval(timerInterval); timerEl.textContent='--'; optionsEl.innerHTML=''; taskContent.textContent='Task skipped. Press Start Task.'; optionsDisabled=true;
-    }
-
-    function endQuiz(){
-      clearInterval(timerInterval);
-      optionsEl.innerHTML='';
-      taskContent.textContent = `🎉 Congratulations ${playerName || 'Player'}! You completed the Compute Quest.`;
-      // show final stats and restart button
-      const r = document.createElement('div'); r.style.marginTop='12px';
-      r.innerHTML = `<div style="margin-top:6px;color:#0b3b52">Final Score: <strong>${score}</strong> — Badges: <strong>${badges}</strong></div>`;
-      const btn = document.createElement('button'); btn.textContent='Restart Quiz'; btn.style.marginTop='10px';
-      btn.onclick = ()=>{ restartQuiz(); };
-      r.appendChild(btn);
-      taskContent.parentNode.appendChild(r);
-      // offer save to leaderboard automatically
-      // optionally auto-save name+score to localStorage
-      // (we won't auto-save without consent; show prompt)
-      setTimeout(()=>{
-        if(confirm('Save your score to leaderboard?')){ saveScore(true); }
-      },400);
-    }
-
-    function restartQuiz(){
-      // reset values but keep player name and node selection
-      credits = 20; score = 0; badges = 0; askedCount = 0;
-      prepareSession();
-      // remove any residual message or result block
-      const prev = document.getElementById('msg'); if(prev) prev.remove();
-      Array.from(optionsEl.children).forEach(c=>c.remove());
-      taskContent.textContent = 'Press Start Task to receive a Gensyn-related question.';
-      updateUI();
-    }
-
-    function saveScore(auto=false){
-      let name = playerName || prompt('Enter name to save on leaderboard (short):','Player');
-      if(!name) return;
-      const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]');
-      table.push({name:name.slice(0,12),score,when:new Date().toISOString()});
-      table.sort((a,b)=>b.score-a.score);
-      localStorage.setItem('gensyn_leaders', JSON.stringify(table.slice(0,30)));
-      renderLeaders();
-      if(!auto) alert('Saved!');
-    }
-
-    function renderLeaders(){
-      const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]');
-      leadersEl.innerHTML='';
-      if(table.length===0){ leadersEl.innerHTML='<li style="list-style:none;color:#0b3b52">No scores yet</li>'; return}
-      table.slice(0,10).forEach(r=>{
-        const li=document.createElement('li'); li.innerHTML = `<span>${r.name}</span><strong>${r.score}</strong>`; leadersEl.appendChild(li);
-      })
-    }
-
-    function shareScore(){
-      const text = `I scored ${score} on Gensyn Compute Quest demo!`;
-      const url = window.location.href || 'Local demo';
-      const tw = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&via=AmitKum955`;
-      window.open(tw,'_blank');
-    }
-
-    // welcome controls
-    document.getElementById('startPlay').onclick = ()=>{
-      const input = document.getElementById('playerName');
-      const val = (input.value||'').trim();
-      if(!val){ alert('Please enter your name to start.'); input.focus(); return; }
-      playerName = val.slice(0,24);
-      welcomeEl.style.display='none';
-      updatePlayerDisplay();
-      // auto-prepare session
-      prepareSession();
-    };
-    document.getElementById('closeWelcome').onclick = ()=>{ welcomeEl.style.display='none'; };
-
-    // wire other buttons
-    document.getElementById('startBtn').onclick = ()=>{ startTask(); };
-    document.getElementById('skipBtn').onclick = ()=>{ skipTask(); };
-    document.getElementById('saveScore').onclick = ()=>{ saveScore(false); };
-    document.getElementById('shareBtn').onclick = ()=>{ shareScore(); };
-
-    function updatePlayerDisplay(){
-      playerDisplay.textContent = 'Player: ' + (playerName || '—');
-    }
-
-    // init
-    renderNodes(); updateUI(); renderLeaders();
-  </script>
+function restartGame() {
+  current = 0; score = 0;
+  document.querySelector(".badge").classList.remove("active");
+  document.querySelector(".result").classList.remove("active");
+  document.querySelector(".welcome").classList.add("active");
+}
+</script>
 </body>
 </html>
