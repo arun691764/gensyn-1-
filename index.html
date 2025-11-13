@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Gensyn — Compute Quest</title>
+  <title>Gensyn — Compute Quest (Final)</title>
   <style>
     body {
       margin: 0;
@@ -17,11 +17,11 @@
       padding: 20px;
     }
     .wrap {
-      width: 900px;
-      background: #ffffffdd;
-      border-radius: 16px;
+      width: 960px;
+      background: #ffffffcc;
+      border-radius: 14px;
       padding: 20px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
     h1 {
       text-align: center;
@@ -31,24 +31,29 @@
     .welcome-overlay {
       position: fixed;
       inset: 0;
-      background: #fff8e1;
+      background: #ffeb3b;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
     }
     .welcome-card {
-      width: 680px;
-      background: #fffff5;
-      padding: 24px;
-      border-radius: 16px;
+      width: 700px;
+      background: #ffeb3b;
+      padding: 20px;
+      border-radius: 12px;
       text-align: center;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-      font-weight: bold;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       color: #000;
+      font-weight: bold;
+    }
+    .welcome-card h2 {
+      margin-bottom: 8px;
+      color: #000;
+      font-weight: 900;
     }
     .xhandle {
-      color: #0077cc;
+      color: #0000ee;
       font-weight: 700;
       text-decoration: none;
     }
@@ -68,7 +73,6 @@
       cursor: pointer;
       font-weight: bold;
       color: #000;
-      margin-top: 8px;
     }
   </style>
 </head>
@@ -84,12 +88,16 @@
 
   <div class="welcome-overlay" id="welcome">
     <div class="welcome-card">
-      <div style="margin-bottom: 12px;">Created by <a href="https://x.com/AmitKum955" target="_blank" class="xhandle">@AmitKum955</a> | Project <a href="https://x.com/gensyn" target="_blank" class="xhandle">@gensyn</a></div>
+      <div style="margin-bottom: 12px; font-weight: bold;">Created by <a href="https://x.com/AmitKum955" target="_blank" class="xhandle">@AmitKum955</a> | Project <a href="https://x.com/gensyn" target="_blank" class="xhandle">@gensyn</a></div>
       <h2>Welcome to Gensyn Compute Quest</h2>
-      <p>This quiz helps you explore the Gensyn project. Earn your badge by scoring well!</p>
-      <p>Enter your name to begin. You’ll get 20 seconds per question. Scoring 75% or higher earns a special Gensyn Gold Batch 🏅</p>
-      <input id="playerName" placeholder="Enter your name" style="padding:8px;border-radius:8px;border:1px solid #ccc;width:80%" />
-      <br><button id="startGame">Start Task</button>
+      <p>This game helps you learn about the Gensyn project. Answer correctly to earn your batch!</p>
+      <p><strong>How to Play:</strong><br>Enter your name, then start the task. Each question has 20 seconds. Answer correctly to increase your score. If you score above 75%, you'll earn a gold medal batch!</p>
+      <div style="margin-top:10px;">
+        <input id="playerName" placeholder="Enter your name" style="padding:8px;border-radius:8px;border:1px solid #ccc;width:80%" />
+      </div>
+      <div style="margin-top:14px;">
+        <button id="startGame">Start Task</button>
+      </div>
     </div>
   </div>
 
@@ -128,7 +136,6 @@
       optEl.innerHTML='';
       q.opts.forEach((o,i)=>{
         const btn=document.createElement('button');
-        btn.classList.add('opt');
         btn.textContent=o;
         btn.onclick=()=>selectAnswer(i,btn);
         optEl.appendChild(btn);
