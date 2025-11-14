@@ -203,9 +203,12 @@ footer{margin-top:14px;color:#6b7e8a;font-size:13px;display:flex;justify-content
 </div>
 
 <script>
-/* Embedded logo - Aapka uploaded Gensyn logo */
-const LOGO_DATA_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAAsTAAALEwEAmpwYAAABNUlEQVR4nO3XMQ0AMAzAsPrXP4fAgDBSJ0q23QVQ9bcLwEoGQTKIkkGUDKJkECWDKBlEySBKBlEyiJJBlAyiZBAlgygZRMkgSgZRMoiSQZQMomQQJYMoGUTJIEoGUTKIkkGUDKJkECWDKBlEySBKBlEyiJJBlAyiZBAlgygZRMkgSgZRMoiSQZQMomQQJYMoGUTJIEoGUTKIkkGUDKJkECWDKBlEySBKBlEyiJJBlAyiZBAlgygZRMkgSgZRMoiSQZQMomQQJYMoGUTJIEoGUTKIkkGUDKJkECWDKBlEySBKBlEyiJJBlAyiZBAlgygZRMkgSgZRMoiSQZQMomQQJYMoGUTJIEoGUTKIkkGUDKJkECWDKBlEySBKBlEyiJJBlAyiZBAlgygZRMkgSgZRMoiSQZQMomQQJYMoPQEbPAPya97/pAAAAABJRU5ErkJggg==";
+/* --- PASTE YOUR IMAGE BASE64 INTO LOGO_DATA_URL --- 
+   Replace REPLACE_WITH_BASE64 with the full single-line base64 string.
+   Example value: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." */
+const LOGO_DATA_URL = "data:image/png;base64,REPLACE_WITH_BASE64";
 
+/* 10 project-related Qs (each has single correct index) */
 const tasks = [
   {q:'Gensyn is designed to unify global compute for what purpose?', opts:['Machine Learning','Gaming','Blockchain wallets','Video streaming'], correctIndex:0},
   {q:'What is the Judge in Gensyn?', opts:['A verifiable runtime','A cloud service','A dataset tool','A consensus engine'], correctIndex:0},
@@ -226,6 +229,7 @@ let credits = 20, score = 0, gaveBadge = 0;
 let asked = 0, correct = 0;
 let sessionOrder = [], current = null, timer = null, timeLeft = 0;
 
+/* DOM refs */
 const nodesEl = document.getElementById('nodes');
 const optionsEl = document.getElementById('options');
 const taskContent = document.getElementById('taskContent');
@@ -256,20 +260,22 @@ const badgeLogo = document.getElementById('badgeLogo');
 const saveScoreBtn = document.getElementById('saveScore');
 const shareBtn = document.getElementById('shareBtn');
 
+/* Audio */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function ensureAudio(){ if(audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{}); }
 function playTone(type='correct'){ try{ ensureAudio(); const o=audioCtx.createOscillator(); const g=audioCtx.createGain(); o.type='sine'; o.frequency.value=(type==='correct')?880:220; g.gain.value=0.0001; o.connect(g); g.connect(audioCtx.destination); const now=audioCtx.currentTime; g.gain.exponentialRampToValueAtTime(0.12,now+0.01); o.start(now); g.gain.exponentialRampToValueAtTime(0.0001,now+0.18); o.stop(now+0.2);}catch(e){}}
 
+/* Helpers */
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
 function updateUI(){ creditsEl.textContent=credits; scoreEl.textContent=score; badgeCountEl.textContent = gaveBadge; playerDisplay.textContent = playerName ? (playerName + (playerHandle ? '  ' + playerHandle : '')) : '—'; renderLeaders(); }
 function renderLeaders(){ const t = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]'); leadersEl.innerHTML=''; if(t.length===0){ leadersEl.innerHTML='<li style="color:#6b7e8a">No scores yet</li>'; return } t.slice(0,8).forEach(r=>{ const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginBottom='6px'; li.innerHTML = `<span>${r.name}</span><strong>${r.score}</strong>`; leadersEl.appendChild(li); }); }
 
+/* nodes */
 const nodeData = [
   {id:'edge',name:'Edge Node',reliability:0.9},
   {id:'cloud',name:'Cloud Node',reliability:0.98},
   {id:'gpu',name:'GPU Rig',reliability:0.85},
 ];
-
 function renderNodes(){
   nodesEl.innerHTML='';
   nodeData.forEach((n, idx)=>{
@@ -286,8 +292,10 @@ function renderNodes(){
   })
 }
 
+/* session */
 function prepareSession(){ sessionOrder = tasks.map((_,i)=>i); shuffle(sessionOrder); asked = 0; correct = 0; gaveBadge = 0; }
 
+/* Start wiring */
 document.addEventListener('DOMContentLoaded', () => {
   startQuizBtn.addEventListener('click', ()=> {
     nameModal.style.display = 'flex';
@@ -302,8 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const name = (modalName.value||'').trim();
     const handle = (modalHandle.value||'').trim();
     if(!name){ alert('Please enter your name to start.'); modalName.focus(); return; }
-    playerName = name.slice(0,24); 
-    playerHandle = handle ? handle.slice(0,24) : '';
+    playerName = name.slice(0,24); playerHandle = handle ? handle.slice(0,24) : '';
     nameModal.style.display='none';
     welcomeOverlay.style.display='none';
     if(!selectedNode){
@@ -315,6 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(()=> { startQuestion(); updateUI(); }, 220);
   });
 
+  // Click on option -> evaluate immediately and advance
   let optionLocked = false;
   optionsEl.addEventListener('click', (ev)=>{
     const opt = ev.target.closest('.opt');
@@ -340,9 +348,11 @@ document.addEventListener('DOMContentLoaded', () => {
   nameModal.style.display = 'none';
   badgeModal.style.display = 'none';
 
+  // Preload logo into badge modal if embedded
   if(LOGO_DATA_URL && LOGO_DATA_URL.startsWith('data:image')) badgeLogo.src = LOGO_DATA_URL;
 });
 
+/* Render options with shuffle and correct flag */
 function renderOptionsWithShuffle(question){
   const pairs = question.opts.map((t,i)=>({text:t, correct: i === question.correctIndex}));
   shuffle(pairs);
@@ -359,6 +369,7 @@ function renderOptionsWithShuffle(question){
   });
 }
 
+/* timer */
 function startTimer(sec=20){
   clearInterval(timer);
   timeLeft = sec;
@@ -370,6 +381,7 @@ function startTimer(sec=20){
   },1000);
 }
 
+/* evaluate and advance */
 function evaluateByDataset(isCorrect){
   return new Promise(resolve=>{
     clearInterval(timer);
@@ -399,8 +411,8 @@ function evaluateByDataset(isCorrect){
   });
 }
 
+/* runner */
 function getNext(){ if(asked >= sessionOrder.length) return null; const idx = sessionOrder[asked++]; return JSON.parse(JSON.stringify(tasks[idx])); }
-
 function startQuestion(){
   if(!playerName){ alert('Please enter your name first.'); return; }
   if(!selectedNode){ selectedNode = nodeData[0].id; Array.from(nodesEl.children).forEach((c,i)=>{ c.classList.remove('selected'); if(i===0) c.classList.add('selected'); }); }
@@ -432,4 +444,120 @@ function finishQuiz(){
 
 function restartToStart(){
   playerName = ''; playerHandle = ''; selectedNode = null; credits = 20; score = 0; gaveBadge = 0; asked = 0; correct = 0; sessionOrder = []; current = null;
-  renderNodes(); updateUI(); welcomeOverlay.style.display =
+  renderNodes(); updateUI(); welcomeOverlay.style.display = 'flex'; nameModal.style.display = 'none';
+}
+
+function showTempMessage(txt, ok){
+  const prev = document.getElementById('msg'); if(prev) prev.remove();
+  const msg = document.createElement('div'); msg.id='msg'; msg.textContent = txt; msg.style.marginTop='8px'; msg.style.color = ok ? '#064e3b' : '#7f1d1d';
+  taskContent.parentNode.insertBefore(msg, optionsEl.nextSibling);
+  setTimeout(()=>{ if(msg) msg.remove(); },1100);
+}
+
+/* Badge: draw pro badge with embedded logo (updated layout) */
+function showBadge(){
+  badgeNameEl.textContent = playerName || 'Player';
+  badgeProjectEl.textContent = 'Gensyn';
+  badgeHandlesEl.textContent = '@GensynAI';
+  if(LOGO_DATA_URL && LOGO_DATA_URL.startsWith('data:image')) badgeLogo.src = LOGO_DATA_URL;
+  badgeModal.style.display = 'flex';
+}
+
+function downloadBadgeImg(){
+  const name = playerName || 'Player';
+  const handles = '@GensynAI';
+  const projectName = 'Gensyn';
+  const canvas = document.createElement('canvas'); canvas.width = 1400; canvas.height = 1800;
+  const ctx = canvas.getContext('2d');
+
+  // background and border
+  ctx.fillStyle = '#fff9ef'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle = '#f0d8a8'; ctx.lineWidth = 32; ctx.strokeRect(40,40,canvas.width-80,canvas.height-80);
+
+  // large circular logo container
+  const cx = canvas.width / 2;
+  const cy = 260;
+  const logoRadius = 200;
+  // outer ring gradient
+  const ring = ctx.createLinearGradient(cx - logoRadius, cy - logoRadius, cx + logoRadius, cy + logoRadius);
+  ring.addColorStop(0, '#6b21a8'); ring.addColorStop(1, '#06b6d4');
+  ctx.beginPath(); ctx.arc(cx, cy, logoRadius + 18, 0, Math.PI*2); ctx.fillStyle = ring; ctx.fill();
+
+  // inner circle (black bg for logo)
+  ctx.beginPath(); ctx.arc(cx, cy, logoRadius, 0, Math.PI*2); ctx.fillStyle = '#000'; ctx.fill();
+
+  // draw logo image (clipped circle)
+  const img = new Image(); img.crossOrigin = "anonymous";
+  img.onload = () => {
+    // clip to circle
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx, cy, logoRadius - 6, 0, Math.PI*2); ctx.closePath(); ctx.clip();
+    // fit image covering the circle
+    const scale = Math.max((logoRadius*2) / img.width, (logoRadius*2) / img.height);
+    const iw = img.width * scale; const ih = img.height * scale;
+    ctx.drawImage(img, cx - iw/2, cy - ih/2, iw, ih);
+    ctx.restore();
+
+    // Title
+    ctx.fillStyle = '#b45309';
+    ctx.font = 'bold 40px Poppins, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Verified Compute Badge', cx, cy + logoRadius + 70);
+
+    // Player big name
+    ctx.fillStyle = '#041a2a';
+    ctx.font = '900 72px Poppins, sans-serif';
+    ctx.fillText(name, cx, cy + logoRadius + 160);
+
+    // Project name (bold)
+    ctx.fillStyle = '#041a2a';
+    ctx.font = '800 36px Poppins, sans-serif';
+    ctx.fillText(projectName + ' — Verified Contributor', cx, cy + logoRadius + 230);
+
+    // handles smaller
+    ctx.fillStyle = '#056a86';
+    ctx.font = 'bold 22px Poppins, sans-serif';
+    ctx.fillText(handles, cx, cy + logoRadius + 280);
+
+    // ribbon box
+    ctx.fillStyle = '#ffd54a';
+    const boxW = 840, boxH = 120;
+    ctx.fillRect(cx - boxW/2, cy + logoRadius + 320, boxW, boxH);
+    ctx.fillStyle = '#8b4513';
+    ctx.font = 'bold 28px Poppins, sans-serif';
+    ctx.fillText('Gensyn — Verified Contributor', cx, cy + logoRadius + 395);
+
+    // small description
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '18px Poppins, sans-serif';
+    ctx.fillText('Awarded for active contributions and knowledge of the protocol.', cx, cy + logoRadius + 480);
+
+    // export
+    const url = canvas.toDataURL('image/png');
+    const a = document.createElement('a'); a.href = url; a.download = `${name.replace(/\s+/g,'_')}_gensyn_badge.png`; a.click();
+  };
+  img.onerror = (e) => {
+    // fallback if logo fails
+    ctx.fillStyle = '#b45309';
+    ctx.font = 'bold 44px Poppins, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Verified Compute Badge', cx, cy + logoRadius + 70);
+    ctx.fillStyle = '#041a2a';
+    ctx.font = '900 72px Poppins, sans-serif';
+    ctx.fillText(name, cx, cy + logoRadius + 160);
+    ctx.fillStyle = '#8b4513';
+    ctx.font = 'bold 28px Poppins, sans-serif';
+    ctx.fillText('Gensyn — Verified Contributor', cx, cy + logoRadius + 395);
+    const url = canvas.toDataURL('image/png'); const a = document.createElement('a'); a.href = url; a.download = `${name.replace(/\s+/g,'_')}_gensyn_badge.png`; a.click();
+  };
+  img.src = LOGO_DATA_URL;
+}
+
+function shareBadgeOnX(){ const text = `I earned the Gensyn Verified Compute Badge — ${playerName || 'Player'} @GensynAI`; window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`, '_blank'); }
+
+/* save */
+function saveScore(){ const name = playerName || prompt('Name for leaderboard:', 'Player'); if(!name) return; const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]'); table.push({name:name.slice(0,12), score, when: new Date().toISOString()}); table.sort((a,b)=>b.score-a.score); localStorage.setItem('gensyn_leaders', JSON.stringify(table.slice(0,30))); renderLeaders(); alert('Saved to leaderboard!'); }
+
+</script>
+</body>
+</html>
