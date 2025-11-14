@@ -40,10 +40,13 @@ footer{margin-top:14px;color:#6b7e8a;font-size:13px;display:flex;justify-content
 .rewards-card{margin:0 auto 16px;max-width:640px;padding:18px;border-radius:12px;background:linear-gradient(90deg,#fff5d6,#ffe59b);color:#1a1200;font-weight:900;box-shadow:0 8px 28px rgba(180,140,20,0.10)}
 .name-modal{width:640px;max-width:92%;background:#fff;padding:20px;border-radius:12px;box-shadow:0 18px 48px rgba(2,6,23,0.08)}
 .badge-modal{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:flex;align-items:center;justify-content:center;z-index:50}
-.badge-card{background:linear-gradient(90deg,#fff9eb,#fff7e6);padding:20px;border-radius:12px;text-align:center;box-shadow:0 30px 80px rgba(4,36,58,0.12)}
-.medal{width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #ffd54a, #f59e0b 60%, #b45309 100%);display:flex;align-items:center;justify-content:center;margin:12px auto}
-.badge-logo{width:110px;height:110px;border-radius:50%;object-fit:cover;margin:10px auto;display:block}
-@media(max-width:900px){.row{flex-direction:column}.right{width:100%}.welcome-card{width:92%}}
+.badge-card{width:820px;max-width:92%;background:linear-gradient(90deg,#fff9eb,#fff7e6);padding:28px;border-radius:14px;text-align:center;box-shadow:0 30px 80px rgba(4,36,58,0.12)}
+.badge-logo{width:180px;height:180px;border-radius:50%;object-fit:cover;margin:8px auto;display:block;border:12px solid #000; box-shadow: 0 10px 30px rgba(0,0,0,0.15)}
+.badge-title{font-weight:900;color:#b45309;font-size:28px;margin-top:12px}
+.badge-player{font-weight:900;font-size:56px;color:#041a2a;margin:26px 0 6px}
+.badge-project{font-weight:900;font-size:28px;color:#041a2a;margin:6px 0}
+.badge-handles{color:#056a86;font-weight:700;margin-top:6px}
+@media(max-width:900px){.row{flex-direction:column}.right{width:100%}.welcome-card{width:92%}.badge-card{width:92%}.badge-logo{width:130px;height:130px}}
 </style>
 </head>
 <body>
@@ -184,14 +187,14 @@ footer{margin-top:14px;color:#6b7e8a;font-size:13px;display:flex;justify-content
 
 <!-- Badge modal -->
 <div id="badgeModal" class="badge-modal" style="display:none">
-  <div class="badge-card" role="dialog">
+  <div class="badge-card" role="dialog" aria-labelledby="badgeTitle">
     <img id="badgeLogo" class="badge-logo" src="" alt="project logo"/>
-    <div style="font-weight:800;font-size:18px" id="badgeTitle">Verified Compute Badge</div>
-    <div style="margin-top:8px" id="badgeTo">Awarded to: <strong id="badgeName">Player</strong></div>
-    <div style="margin-top:6px">Project: <strong>Gensyn</strong> — <a href="https://x.com/GensynAI" target="_blank">@GensynAI</a></div>
-    <div style="margin-top:8px">Handles: <span id="badgeHandles">@GensynAI</span></div>
+    <div class="badge-title" id="badgeTitle">Verified Compute Badge</div>
+    <div class="badge-player" id="badgeName">Player</div>
+    <div class="badge-project" id="badgeProject">Gensyn</div>
+    <div class="badge-handles" id="badgeHandles">@GensynAI</div>
 
-    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:18px">
       <button id="downloadBadge" class="primary">Download Badge</button>
       <button id="shareBadge" class="ghost">Share on X</button>
       <button id="closeBadge" class="ghost">Close</button>
@@ -200,8 +203,8 @@ footer{margin-top:14px;color:#6b7e8a;font-size:13px;display:flex;justify-content
 </div>
 
 <script>
-/* Embedded logo data URL */
-const LOGO_DATA_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAIAAAC1oVbVAAAgAElEQVR4nOydd5xV1Zn/3vWm3Lcu9Yt2W2Xcq2b2W2S7bptu2W7bttt2bdu2bW7bttt27bttt2bdu2bW7btts2bdu2bW7bttt27bttt27bttt27bttt27bttt27bttt27bttt27btt9b9n3n3xkp8nH5zv5e3jv3+eXv7+7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7w==";
+/* Embedded logo data URL (already embedded) */
+const LOGO_DATA_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAIAAAC1oVbVAAAgAElEQVR4nOydd5xV1Zn/3vWm3Lcu9Yt2W2Xcq2b2W2S7bptu2W7bttt2bdu2bW7btts2bdu2bW7bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt==";
 
 /* 10 project-related Qs (each has single correct index) */
 const tasks = [
@@ -245,6 +248,7 @@ const cancelStart = document.getElementById('cancelStart');
 
 const badgeModal = document.getElementById('badgeModal');
 const badgeNameEl = document.getElementById('badgeName');
+const badgeProjectEl = document.getElementById('badgeProject');
 const badgeHandlesEl = document.getElementById('badgeHandles');
 const downloadBadge = document.getElementById('downloadBadge');
 const shareBadge = document.getElementById('shareBadge');
@@ -448,51 +452,105 @@ function showTempMessage(txt, ok){
   setTimeout(()=>{ if(msg) msg.remove(); },1100);
 }
 
-/* Badge: draw pro badge with embedded logo */
+/* Badge: draw pro badge with embedded logo (updated layout) */
 function showBadge(){
   badgeNameEl.textContent = playerName || 'Player';
+  badgeProjectEl.textContent = 'Gensyn';
   badgeHandlesEl.textContent = '@GensynAI';
+  badgeLogo.src = LOGO_DATA_URL;
   badgeModal.style.display = 'flex';
 }
+
 function downloadBadgeImg(){
   const name = playerName || 'Player';
   const handles = '@GensynAI';
-  const project = '@GensynAI';
-  const canvas = document.createElement('canvas'); canvas.width = 1200; canvas.height = 1500;
+  const projectName = 'Gensyn';
+  const canvas = document.createElement('canvas'); canvas.width = 1400; canvas.height = 1800;
   const ctx = canvas.getContext('2d');
+
+  // background and border
   ctx.fillStyle = '#fff9ef'; ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.strokeStyle = '#f0d8a8'; ctx.lineWidth = 18; ctx.strokeRect(30,30,canvas.width-60,canvas.height-60);
-  const img = new Image();
-  img.crossOrigin = "anonymous";
+  ctx.strokeStyle = '#f0d8a8'; ctx.lineWidth = 32; ctx.strokeRect(40,40,canvas.width-80,canvas.height-80);
+
+  // large circular logo container
+  const cx = canvas.width / 2;
+  const cy = 260;
+  const logoRadius = 200;
+  // outer ring gradient
+  const ring = ctx.createLinearGradient(cx - logoRadius, cy - logoRadius, cx + logoRadius, cy + logoRadius);
+  ring.addColorStop(0, '#6b21a8'); ring.addColorStop(1, '#06b6d4');
+  ctx.beginPath(); ctx.arc(cx, cy, logoRadius + 18, 0, Math.PI*2); ctx.fillStyle = ring; ctx.fill();
+
+  // inner circle (black bg for logo)
+  ctx.beginPath(); ctx.arc(cx, cy, logoRadius, 0, Math.PI*2); ctx.fillStyle = '#000'; ctx.fill();
+
+  // draw logo image (clipped circle)
+  const img = new Image(); img.crossOrigin = "anonymous";
   img.onload = () => {
-    const icX = canvas.width/2; const icY = 300; const radius = 140;
-    const grad = ctx.createLinearGradient(icX-80,icY-80,icX+80,icY+80);
-    grad.addColorStop(0,'#4c1d95'); grad.addColorStop(1,'#06b6d4');
-    ctx.beginPath(); ctx.arc(icX, icY, radius+10, 0, Math.PI*2); ctx.fillStyle = grad; ctx.fill();
+    // clip to circle
     ctx.save();
-    ctx.beginPath(); ctx.arc(icX, icY, radius, 0, Math.PI*2); ctx.closePath(); ctx.clip();
-    const scale = Math.max((radius*2) / img.width, (radius*2) / img.height);
+    ctx.beginPath(); ctx.arc(cx, cy, logoRadius - 6, 0, Math.PI*2); ctx.closePath(); ctx.clip();
+    // fit image covering the circle
+    const scale = Math.max((logoRadius*2) / img.width, (logoRadius*2) / img.height);
     const iw = img.width * scale; const ih = img.height * scale;
-    ctx.drawImage(img, icX - iw/2, icY - ih/2, iw, ih);
+    ctx.drawImage(img, cx - iw/2, cy - ih/2, iw, ih);
     ctx.restore();
-    ctx.fillStyle = '#b45309'; ctx.font = 'bold 44px Poppins, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('Verified Compute Badge', canvas.width/2, icY + 220);
-    ctx.fillStyle = '#041a2a'; ctx.font = 'bold 64px Poppins, sans-serif'; ctx.fillText(name, canvas.width/2, icY + 420);
-    ctx.fillStyle = '#056a86'; ctx.font = '22px Poppins, sans-serif'; ctx.fillText(handles, canvas.width/2, icY + 480);
-    ctx.fillStyle = '#6b7280'; ctx.font = '20px Poppins, sans-serif'; ctx.fillText(project, canvas.width/2, icY + 520);
-    ctx.fillStyle = '#ffd54a'; ctx.fillRect(canvas.width/2 - 340, icY + 600, 680, 120);
-    ctx.fillStyle = '#8b4513'; ctx.font = 'bold 36px Poppins, sans-serif'; ctx.fillText('Gensyn — Verified Contributor', canvas.width/2, icY + 670);
-    ctx.fillStyle = '#6b7280'; ctx.font = '16px Poppins, sans-serif'; ctx.fillText('Awarded for active contributions and knowledge of the protocol.', canvas.width/2, icY + 830);
-    const url = canvas.toDataURL('image/png'); const a = document.createElement('a'); a.href = url; a.download = `${name.replace(/\s+/g,'_')}_gensyn_badge.png`; a.click();
+
+    // Title
+    ctx.fillStyle = '#b45309';
+    ctx.font = 'bold 40px Poppins, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Verified Compute Badge', cx, cy + logoRadius + 70);
+
+    // Player big name
+    ctx.fillStyle = '#041a2a';
+    ctx.font = '900 72px Poppins, sans-serif';
+    ctx.fillText(name, cx, cy + logoRadius + 160);
+
+    // Project name (bold)
+    ctx.fillStyle = '#041a2a';
+    ctx.font = '800 36px Poppins, sans-serif';
+    ctx.fillText(projectName + ' — Verified Contributor', cx, cy + logoRadius + 230);
+
+    // handles smaller
+    ctx.fillStyle = '#056a86';
+    ctx.font = 'bold 22px Poppins, sans-serif';
+    ctx.fillText(handles, cx, cy + logoRadius + 280);
+
+    // ribbon box
+    ctx.fillStyle = '#ffd54a';
+    const boxW = 840, boxH = 120;
+    ctx.fillRect(cx - boxW/2, cy + logoRadius + 320, boxW, boxH);
+    ctx.fillStyle = '#8b4513';
+    ctx.font = 'bold 28px Poppins, sans-serif';
+    ctx.fillText('Gensyn — Verified Contributor', cx, cy + logoRadius + 395);
+
+    // small description
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '18px Poppins, sans-serif';
+    ctx.fillText('Awarded for active contributions and knowledge of the protocol.', cx, cy + logoRadius + 480);
+
+    // export
+    const url = canvas.toDataURL('image/png');
+    const a = document.createElement('a'); a.href = url; a.download = `${name.replace(/\s+/g,'_')}_gensyn_badge.png`; a.click();
   };
   img.onerror = (e) => {
-    console.warn('Logo load failed, generating badge without logo', e);
-    ctx.fillStyle = '#b45309'; ctx.font = 'bold 44px Poppins, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('Verified Compute Badge', canvas.width/2, 480);
-    ctx.fillStyle = '#041a2a'; ctx.font = 'bold 64px Poppins, sans-serif'; ctx.fillText(name, canvas.width/2, 720);
-    ctx.fillStyle = '#056a86'; ctx.font = '22px Poppins, sans-serif'; ctx.fillText(handles, canvas.width/2, 780);
+    // fallback if logo fails
+    ctx.fillStyle = '#b45309';
+    ctx.font = 'bold 44px Poppins, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Verified Compute Badge', cx, cy + logoRadius + 70);
+    ctx.fillStyle = '#041a2a';
+    ctx.font = '900 72px Poppins, sans-serif';
+    ctx.fillText(name, cx, cy + logoRadius + 160);
+    ctx.fillStyle = '#8b4513';
+    ctx.font = 'bold 28px Poppins, sans-serif';
+    ctx.fillText('Gensyn — Verified Contributor', cx, cy + logoRadius + 395);
     const url = canvas.toDataURL('image/png'); const a = document.createElement('a'); a.href = url; a.download = `${name.replace(/\s+/g,'_')}_gensyn_badge.png`; a.click();
   };
   img.src = LOGO_DATA_URL;
 }
+
 function shareBadgeOnX(){ const text = `I earned the Gensyn Verified Compute Badge — ${playerName || 'Player'} @GensynAI`; window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`, '_blank'); }
 
 /* save */
