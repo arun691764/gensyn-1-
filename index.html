@@ -203,8 +203,8 @@ footer{margin-top:14px;color:#6b7e8a;font-size:13px;display:flex;justify-content
 </div>
 
 <script>
-/* Embedded logo data URL (already embedded) */
-const LOGO_DATA_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAIAAAC1oVbVAAAgAElEQVR4nOydd5xV1Zn/3vWm3Lcu9Yt2W2Xcq2b2W2S7bptu2W7bttt2bdu2bW7btts2bdu2bW7bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt27bttt==";
+/* Embedded logo data URL - Aapka uploaded Gensyn logo */
+const LOGO_DATA_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAAsTAAALEwEAmpwYAAABNUlEQVR4nO3XMQ0AMAzAsPrXP4fAgDBSJ0q23QVQ9bcLwEoGQTKIkkGUDKJkECWDKBlEySBKBlEyiJJBlAyiZBAlgygZRMkgSgZRMoiSQZQMomQQJYMoGUTJIEoGUTKIkkGUDKJkECWDKBlEySBKBlEyiJJBlAyiZBAlgygZRMkgSgZRMoiSQZQMomQQJYMoGUTJIEoGUTKIkkGUDKJkECWDKBlEySBKBlEyiJJBlAyiZBAlgygZRMkgSgZRMoiSQZQMomQQJYMoGUTJIEoGUTKIkkGUDKJkECWDKBlEySBKBlEyiJJBlAyiZBAlgygZRMkgSgZRMoiSQZQMomQQJYMoGUTJIEoGUTKIkkGUDKJkECWDKBlEySBKBlEyiJJBlAyiZBAlgygZRMkgSgZRMoiSQZQMomQQJYMoPQEbPAPya97/pAAAAABJRU5ErkJggg==";
 
 /* 10 project-related Qs (each has single correct index) */
 const tasks = [
@@ -435,127 +435,4 @@ function finishQuiz(){
   r.appendChild(btn);
   taskContent.parentNode.appendChild(r);
   if(percent >= 75){
-    gaveBadge = 1; updateUI(); setTimeout(()=> showBadge(), 700);
-  } else { gaveBadge = 0; updateUI(); }
-  setTimeout(()=> { if(confirm('Save your score to leaderboard?')) saveScore(); },800);
-}
-
-function restartToStart(){
-  playerName = ''; playerHandle = ''; selectedNode = null; credits = 20; score = 0; gaveBadge = 0; asked = 0; correct = 0; sessionOrder = []; current = null;
-  renderNodes(); updateUI(); welcomeOverlay.style.display = 'flex'; nameModal.style.display = 'none';
-}
-
-function showTempMessage(txt, ok){
-  const prev = document.getElementById('msg'); if(prev) prev.remove();
-  const msg = document.createElement('div'); msg.id='msg'; msg.textContent = txt; msg.style.marginTop='8px'; msg.style.color = ok ? '#064e3b' : '#7f1d1d';
-  taskContent.parentNode.insertBefore(msg, optionsEl.nextSibling);
-  setTimeout(()=>{ if(msg) msg.remove(); },1100);
-}
-
-/* Badge: draw pro badge with embedded logo (updated layout) */
-function showBadge(){
-  badgeNameEl.textContent = playerName || 'Player';
-  badgeProjectEl.textContent = 'Gensyn';
-  badgeHandlesEl.textContent = '@GensynAI';
-  badgeLogo.src = LOGO_DATA_URL;
-  badgeModal.style.display = 'flex';
-}
-
-function downloadBadgeImg(){
-  const name = playerName || 'Player';
-  const handles = '@GensynAI';
-  const projectName = 'Gensyn';
-  const canvas = document.createElement('canvas'); canvas.width = 1400; canvas.height = 1800;
-  const ctx = canvas.getContext('2d');
-
-  // background and border
-  ctx.fillStyle = '#fff9ef'; ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.strokeStyle = '#f0d8a8'; ctx.lineWidth = 32; ctx.strokeRect(40,40,canvas.width-80,canvas.height-80);
-
-  // large circular logo container
-  const cx = canvas.width / 2;
-  const cy = 260;
-  const logoRadius = 200;
-  // outer ring gradient
-  const ring = ctx.createLinearGradient(cx - logoRadius, cy - logoRadius, cx + logoRadius, cy + logoRadius);
-  ring.addColorStop(0, '#6b21a8'); ring.addColorStop(1, '#06b6d4');
-  ctx.beginPath(); ctx.arc(cx, cy, logoRadius + 18, 0, Math.PI*2); ctx.fillStyle = ring; ctx.fill();
-
-  // inner circle (black bg for logo)
-  ctx.beginPath(); ctx.arc(cx, cy, logoRadius, 0, Math.PI*2); ctx.fillStyle = '#000'; ctx.fill();
-
-  // draw logo image (clipped circle)
-  const img = new Image(); img.crossOrigin = "anonymous";
-  img.onload = () => {
-    // clip to circle
-    ctx.save();
-    ctx.beginPath(); ctx.arc(cx, cy, logoRadius - 6, 0, Math.PI*2); ctx.closePath(); ctx.clip();
-    // fit image covering the circle
-    const scale = Math.max((logoRadius*2) / img.width, (logoRadius*2) / img.height);
-    const iw = img.width * scale; const ih = img.height * scale;
-    ctx.drawImage(img, cx - iw/2, cy - ih/2, iw, ih);
-    ctx.restore();
-
-    // Title
-    ctx.fillStyle = '#b45309';
-    ctx.font = 'bold 40px Poppins, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Verified Compute Badge', cx, cy + logoRadius + 70);
-
-    // Player big name
-    ctx.fillStyle = '#041a2a';
-    ctx.font = '900 72px Poppins, sans-serif';
-    ctx.fillText(name, cx, cy + logoRadius + 160);
-
-    // Project name (bold)
-    ctx.fillStyle = '#041a2a';
-    ctx.font = '800 36px Poppins, sans-serif';
-    ctx.fillText(projectName + ' — Verified Contributor', cx, cy + logoRadius + 230);
-
-    // handles smaller
-    ctx.fillStyle = '#056a86';
-    ctx.font = 'bold 22px Poppins, sans-serif';
-    ctx.fillText(handles, cx, cy + logoRadius + 280);
-
-    // ribbon box
-    ctx.fillStyle = '#ffd54a';
-    const boxW = 840, boxH = 120;
-    ctx.fillRect(cx - boxW/2, cy + logoRadius + 320, boxW, boxH);
-    ctx.fillStyle = '#8b4513';
-    ctx.font = 'bold 28px Poppins, sans-serif';
-    ctx.fillText('Gensyn — Verified Contributor', cx, cy + logoRadius + 395);
-
-    // small description
-    ctx.fillStyle = '#6b7280';
-    ctx.font = '18px Poppins, sans-serif';
-    ctx.fillText('Awarded for active contributions and knowledge of the protocol.', cx, cy + logoRadius + 480);
-
-    // export
-    const url = canvas.toDataURL('image/png');
-    const a = document.createElement('a'); a.href = url; a.download = `${name.replace(/\s+/g,'_')}_gensyn_badge.png`; a.click();
-  };
-  img.onerror = (e) => {
-    // fallback if logo fails
-    ctx.fillStyle = '#b45309';
-    ctx.font = 'bold 44px Poppins, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Verified Compute Badge', cx, cy + logoRadius + 70);
-    ctx.fillStyle = '#041a2a';
-    ctx.font = '900 72px Poppins, sans-serif';
-    ctx.fillText(name, cx, cy + logoRadius + 160);
-    ctx.fillStyle = '#8b4513';
-    ctx.font = 'bold 28px Poppins, sans-serif';
-    ctx.fillText('Gensyn — Verified Contributor', cx, cy + logoRadius + 395);
-    const url = canvas.toDataURL('image/png'); const a = document.createElement('a'); a.href = url; a.download = `${name.replace(/\s+/g,'_')}_gensyn_badge.png`; a.click();
-  };
-  img.src = LOGO_DATA_URL;
-}
-
-function shareBadgeOnX(){ const text = `I earned the Gensyn Verified Compute Badge — ${playerName || 'Player'} @GensynAI`; window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`, '_blank'); }
-
-/* save */
-function saveScore(){ const name = playerName || prompt('Name for leaderboard:', 'Player'); if(!name) return; const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]'); table.push({name:name.slice(0,12), score, when: new Date().toISOString()}); table.sort((a,b)=>b.score-a.score); localStorage.setItem('gensyn_leaders', JSON.stringify(table.slice(0,30))); renderLeaders(); alert('Saved to leaderboard!'); }
-
-</script>
-</body>
-</html>
+    gaveBadge = 1; updateUI(); setTimeout
