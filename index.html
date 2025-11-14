@@ -188,8 +188,8 @@ footer{margin-top:14px;color:#6b7e8a;font-size:13px;display:flex;justify-content
     <img id="badgeLogo" class="badge-logo" src="" alt="project logo"/>
     <div style="font-weight:800;font-size:18px" id="badgeTitle">Verified Compute Badge</div>
     <div style="margin-top:8px" id="badgeTo">Awarded to: <strong id="badgeName">Player</strong></div>
-    <div style="margin-top:6px">Project: <strong>@GensynAI</strong></div>
-    <div style="margin-top:8px">Handles: <span id="badgeHandles">—</span></div>
+    <div style="margin-top:6px">Project: <strong>Gensyn</strong> — <a href="https://x.com/GensynAI" target="_blank">@GensynAI</a></div>
+    <div style="margin-top:8px">Handles: <span id="badgeHandles">@GensynAI</span></div>
 
     <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
       <button id="downloadBadge" class="primary">Download Badge</button>
@@ -200,14 +200,11 @@ footer{margin-top:14px;color:#6b7e8a;font-size:13px;display:flex;justify-content
 </div>
 
 <script>
-/* --------- IMPORTANT ----------
- Replace the LOGO_DATA_URL string with your full base64 data URL (one long line). 
- Example: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
- Do NOT add line breaks inside the string.
---------------------------------*/
-const LOGO_DATA_URL = "data:image/png;base64,REPLACE_WITH_FULL_BASE64_IMAGE_STRING";
+/* Replace this with your embedded logo data URL if you want an inline badge logo.
+   Example: data:image/png;base64,iVBORw0K...  (one long line, no breaks) */
+const LOGO_DATA_URL = "data:image/png;base64,REPLACE_WITH_BASE64";
 
-/* --- QUESTIONS (10 project-related; each has single correctIndex) --- */
+/* 10 project-related Qs (each has single correct index) */
 const tasks = [
   {q:'Gensyn is designed to unify global compute for what purpose?', opts:['Machine Learning','Gaming','Blockchain wallets','Video streaming'], correctIndex:0},
   {q:'What is the Judge in Gensyn?', opts:['A verifiable runtime','A cloud service','A dataset tool','A consensus engine'], correctIndex:0},
@@ -254,12 +251,11 @@ const downloadBadge = document.getElementById('downloadBadge');
 const shareBadge = document.getElementById('shareBadge');
 const closeBadge = document.getElementById('closeBadge');
 const badgeLogo = document.getElementById('badgeLogo');
-const badgeTitle = document.getElementById('badgeTitle');
 
 const saveScoreBtn = document.getElementById('saveScore');
 const shareBtn = document.getElementById('shareBtn');
 
-/* Audio context */
+/* Audio */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function ensureAudio(){ if(audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{}); }
 function playTone(type='correct'){ try{ ensureAudio(); const o=audioCtx.createOscillator(); const g=audioCtx.createGain(); o.type='sine'; o.frequency.value=(type==='correct')?880:220; g.gain.value=0.0001; o.connect(g); g.connect(audioCtx.destination); const now=audioCtx.currentTime; g.gain.exponentialRampToValueAtTime(0.12,now+0.01); o.start(now); g.gain.exponentialRampToValueAtTime(0.0001,now+0.18); o.stop(now+0.2);}catch(e){}}
@@ -267,7 +263,7 @@ function playTone(type='correct'){ try{ ensureAudio(); const o=audioCtx.createOs
 /* Helpers */
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
 function updateUI(){ creditsEl.textContent=credits; scoreEl.textContent=score; badgeCountEl.textContent = gaveBadge; playerDisplay.textContent = playerName ? (playerName + (playerHandle ? '  ' + playerHandle : '')) : '—'; renderLeaders(); }
-function renderLeaders(){ const t = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]'); leadersEl.innerHTML=''; if(t.length===0){ leadersEl.innerHTML='<li style=\"color:#6b7e8a\">No scores yet</li>'; return } t.slice(0,8).forEach(r=>{ const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginBottom='6px'; li.innerHTML = `<span>${r.name}</span><strong>${r.score}</strong>`; leadersEl.appendChild(li); }); }
+function renderLeaders(){ const t = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]'); leadersEl.innerHTML=''; if(t.length===0){ leadersEl.innerHTML='<li style="color:#6b7e8a">No scores yet</li>'; return } t.slice(0,8).forEach(r=>{ const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginBottom='6px'; li.innerHTML = `<span>${r.name}</span><strong>${r.score}</strong>`; leadersEl.appendChild(li); }); }
 
 /* nodes */
 const nodeData = [
@@ -296,7 +292,6 @@ function prepareSession(){ sessionOrder = tasks.map((_,i)=>i); shuffle(sessionOr
 
 /* Start wiring */
 document.addEventListener('DOMContentLoaded', () => {
-  // Start button opens name modal
   startQuizBtn.addEventListener('click', ()=> {
     nameModal.style.display = 'flex';
     modalName.value = '';
@@ -322,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(()=> { startQuestion(); updateUI(); }, 220);
   });
 
-  // Delegated click for options (robust)
+  // Click on option -> evaluate immediately and advance
   let optionLocked = false;
   optionsEl.addEventListener('click', (ev)=>{
     const opt = ev.target.closest('.opt');
@@ -348,18 +343,12 @@ document.addEventListener('DOMContentLoaded', () => {
   nameModal.style.display = 'none';
   badgeModal.style.display = 'none';
 
-  // Preload logo into badge modal (if data present)
-  if(LOGO_DATA_URL && LOGO_DATA_URL.startsWith('data:image')){
-    badgeLogo.src = LOGO_DATA_URL;
-  } else {
-    // fallback to project handle avatar
-    badgeLogo.src = 'https://i.ibb.co/5Kx2f9F/gensynlogo.png'; // fallback small public image
-  }
+  // Preload logo into badge modal if embedded
+  if(LOGO_DATA_URL && LOGO_DATA_URL.startsWith('data:image')) badgeLogo.src = LOGO_DATA_URL;
 });
 
 /* Render options with shuffle and correct flag */
 function renderOptionsWithShuffle(question){
-  // question: {opts:[], correctIndex:int}
   const pairs = question.opts.map((t,i)=>({text:t, correct: i === question.correctIndex}));
   shuffle(pairs);
   optionsEl.innerHTML = '';
@@ -368,7 +357,6 @@ function renderOptionsWithShuffle(question){
     b.className = 'opt';
     b.textContent = (String.fromCharCode(65+i) + '. ' + p.text);
     b.dataset.correct = p.correct ? 'true' : 'false';
-    // accessibility
     b.setAttribute('role','button');
     b.setAttribute('tabindex','0');
     b.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') b.click(); });
@@ -392,19 +380,15 @@ function startTimer(sec=20){
 function evaluateByDataset(isCorrect){
   return new Promise(resolve=>{
     clearInterval(timer);
-    // reveal correct/wrong visually based on data-correct attributes
     Array.from(optionsEl.children).forEach((c)=>{
       c.classList.remove('correct','wrong','selected');
       if(c.dataset.correct === 'true') c.classList.add('correct');
     });
-    // mark clicked wrong if necessary
     if(!isCorrect){
       const selected = Array.from(optionsEl.children).find(x=>x.classList.contains('selected'));
       if(selected) selected.classList.add('wrong');
     }
-    // sound
     try{ playTone(isCorrect ? 'correct' : 'wrong'); }catch(e){}
-    // stats
     if(isCorrect){
       const node = nodeData.find(n=>n.id === selectedNode) || nodeData[0];
       const gain = Math.ceil(10 * node.reliability);
@@ -468,13 +452,12 @@ function showTempMessage(txt, ok){
 /* Badge: draw pro badge with embedded logo */
 function showBadge(){
   badgeNameEl.textContent = playerName || 'Player';
-  badgeHandlesEl.textContent = (playerHandle ? playerHandle + ' • ' : '') + '@AmitKum955 • @GensynAI';
-  // set logo (already set at DOMContentLoaded) - ensure visible
+  badgeHandlesEl.textContent = '@GensynAI';
   badgeModal.style.display = 'flex';
 }
 function downloadBadgeImg(){
   const name = playerName || 'Player';
-  const handles = (playerHandle ? playerHandle + ' • ' : '') + '@AmitKum955 • @GensynAI';
+  const handles = '@GensynAI';
   const project = '@GensynAI';
   const canvas = document.createElement('canvas'); canvas.width = 1200; canvas.height = 1500;
   const ctx = canvas.getContext('2d');
@@ -513,7 +496,7 @@ function downloadBadgeImg(){
 }
 function shareBadgeOnX(){ const text = `I earned the Gensyn Verified Compute Badge — ${playerName || 'Player'} @GensynAI`; window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`, '_blank'); }
 
-/* save & share */
+/* save */
 function saveScore(){ const name = playerName || prompt('Name for leaderboard:', 'Player'); if(!name) return; const table = JSON.parse(localStorage.getItem('gensyn_leaders')||'[]'); table.push({name:name.slice(0,12), score, when: new Date().toISOString()}); table.sort((a,b)=>b.score-a.score); localStorage.setItem('gensyn_leaders', JSON.stringify(table.slice(0,30))); renderLeaders(); alert('Saved to leaderboard!'); }
 
 </script>
